@@ -73,4 +73,11 @@ public class Pelicula{
         this.stockDisponible = stockDisponible;
     }
 
+    public boolean hayStock() {
+        return stockDisponible > 0;
+    }
+
+    public void disminuirStock() {
+        stockDisponible--;
+    }
 }
