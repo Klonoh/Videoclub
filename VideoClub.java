@@ -59,4 +59,11 @@ public class VideoClub{
             }
         }
     }
+    public ArrayList<Recomendacion> getRecomendaciones() {
+        return recomendaciones;
+    }
+
+    public void setRecomendaciones(ArrayList<Recomendacion> recomendaciones) {
+        this.recomendaciones = recomendaciones;
+    }
 }
