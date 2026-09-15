@@ -167,5 +167,138 @@ public class VideoClub{
     public ArrayList<Arriendo> listarArriendos() {
         return arriendos;
     }
+
+    public Map<String, Integer> obtenerPreferenciasGenero(int idCliente) {
+
+        Map<String, Integer> preferencias = new HashMap<>();
+
+        ArrayList<Arriendo> historial =
+            obtenerHistorialCliente(idCliente);
+
+        for (Arriendo arriendo : historial) {
+
+            String genero =
+                arriendo.getPelicula().getGenero();
+
+            preferencias.put(
+                genero,
+                preferencias.getOrDefault(genero, 0) + 1
+            );
+        }
+
+        return preferencias;
+    }
+
+    private int obtenerExitosGenero(int idCliente, String genero) {
+
+        int exitos = 0;
+
+        for (Recomendacion recomendacion : recomendaciones) {
+
+            if (recomendacion.getCliente().getIdCliente() == idCliente &&
+                recomendacion.isExitosa() &&
+                recomendacion.getPelicula().getGenero().equals(genero)) {
+
+                exitos++;
+            }
+        }
+
+        return exitos;
+    }
+
+    private boolean tienePeliculaArrendada(int idCliente, int idPelicula) {
+
+        for (Arriendo arriendo : arriendos) {
+
+            if (arriendo.getCliente().getIdCliente() == idCliente &&
+                arriendo.getPelicula().getIdPelicula() == idPelicula &&
+                !arriendo.isDevuelto()) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean yaFueRecomendada(int idCliente,int idPelicula) {
+
+        for (Recomendacion recomendacion : recomendaciones) {
+
+            if (recomendacion.getCliente().getIdCliente() == idCliente && recomendacion.getPelicula().getIdPelicula() == idPelicula) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private ArrayList<Pelicula> generarRecomendacionesClienteNuevo(Cliente cliente, int cantidad) {
+        // Implementación para generar recomendaciones para un cliente nuevo
+        return new ArrayList<>();
+    }
+
+    public ArrayList<Pelicula> generarRecomendaciones(int idCliente, int cantidad) throws ClienteNoEncontradoException {
+
+        Cliente cliente = buscarCliente(idCliente);
+
+        Map<String, Integer> preferencias = obtenerPreferenciasGenero(idCliente);
+
+        if (preferencias.isEmpty()) {
+            return generarRecomendacionesClienteNuevo(cliente, cantidad);
+        }
+
+        Map<Pelicula, Integer> puntajes = new HashMap<>();
+
+        for (Pelicula pelicula : peliculas.values()) {
+
+            if (!pelicula.hayStock()) {
+                continue;
+            }
+
+            if (tienePeliculaArrendada(idCliente,pelicula.getIdPelicula())) {
+
+                continue;
+            }
+
+            if (yaFueRecomendada(idCliente,pelicula.getIdPelicula())) {
+
+                continue;
+            }
+
+            String genero = pelicula.getGenero();
+
+            int puntajeHistorial = preferencias.getOrDefault(genero, 0);
+
+            int puntajeExitos = obtenerExitosGenero(idCliente, genero);
+
+            int puntaje = puntajeHistorial + (2 * puntajeExitos);
+
+            if (puntaje > 0) {
+                puntajes.put(pelicula, puntaje);
+            }
+        }
+
+        ArrayList<Pelicula> candidatas = new ArrayList<>(puntajes.keySet());
+
+        candidatas.sort((p1, p2) -> Integer.compare(puntajes.get(p2),puntajes.get(p1)));
+
+        ArrayList<Pelicula> resultado = new ArrayList<>();
+
+        for (int i = 0; i < candidatas.size() && i < cantidad; i++) {
+
+            Pelicula pelicula = candidatas.get(i);
+
+            resultado.add(pelicula);
+
+            Recomendacion recomendacion = new Recomendacion(cliente,pelicula);
+
+            agregarRecomendacion(recomendacion);
+        }
+
+        return resultado;
+    }
+    
 }
 
