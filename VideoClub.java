@@ -38,12 +38,22 @@ public class VideoClub{
 
     public Pelicula buscarPelicula(int idPelicula) throws PeliculaNoDisponibleException {
         Pelicula pelicula = peliculas.get(idPelicula);
-
         if (pelicula == null) {
-            throw new PeliculaNoDisponibleException("No se encontro una pelicula con ID: " + idPelicula);
+            throw new PeliculaNoDisponibleException("No existe una pelicula con id " + idPelicula);
         }
+        return pelicula;
+    }
 
-        return peliculas.get(idPelicula);
+    /** Sobrecarga: busca por coincidencia parcial de titulo o genero (no lanza excepcion, retorna lista vacia si no hay). */
+    public List<Pelicula> buscarPelicula(String textoCriterio) {
+        List<Pelicula> resultado = new ArrayList<>();
+        String criterio = textoCriterio.toLowerCase();
+        for (Pelicula p : peliculas.values()) {
+            if (p.getTitulo().toLowerCase().contains(criterio) || p.getGenero().toLowerCase().contains(criterio)) {
+                resultado.add(p);
+            }
+        }
+        return resultado;
     }
 
     public boolean eliminarCliente(int idCliente) throws ClienteNoEncontradoException {
