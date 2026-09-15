@@ -21,4 +21,8 @@ public class Recomendacion {
     public boolean isExitosa() {
         return exitosa;
     }
+
+    public void setExitosa(boolean exitosa) {
+        this.exitosa = exitosa;
+    }
 }
