@@ -1,18 +1,21 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.time.LocalDate;
 
 public class VideoClub{
     private Map<Integer, Cliente> clientes;
     private Map<Integer, Pelicula> peliculas;
     private ArrayList<Arriendo> arriendos;
+    private Map<Integer, List<Arriendo>> historialClientes;
     private ArrayList<Recomendacion> recomendaciones;
 
     public VideoClub() {
         clientes = new HashMap<>();
         peliculas = new HashMap<>();
         arriendos = new ArrayList<>();
+        historialClientes = new HashMap<>();
         recomendaciones = new ArrayList<>();
     }
 
@@ -89,6 +92,7 @@ public class VideoClub{
 
     public void agregarArriendo(Arriendo arriendo) {
         arriendos.add(arriendo);
+        historialClientes.computeIfAbsent(arriendo.getCliente().getIdCliente(), k -> new ArrayList<>()).add(arriendo);
     }
 
     public void agregarRecomendacion(Recomendacion recomendacion) {
@@ -108,7 +112,7 @@ public class VideoClub{
 
             Arriendo arriendo = new Arriendo(cliente, pelicula);
 
-            arriendos.add(arriendo);
+            agregarArriendo(arriendo);
             pelicula.disminuirStock();
 
             for (Recomendacion recomendacion : recomendaciones) {
@@ -136,16 +140,7 @@ public class VideoClub{
     }
 
     public ArrayList<Arriendo> obtenerHistorialCliente(int idCliente) {
-
-        ArrayList<Arriendo> historial = new ArrayList<>();
-
-        for (Arriendo arriendo : arriendos) {
-            if (arriendo.getCliente().getIdCliente() == idCliente) {
-                historial.add(arriendo);
-            }
-        }
-
-        return historial;
+        return new ArrayList<>(historialClientes.getOrDefault(idCliente, new ArrayList<>()));
     }
 
     public ArrayList<Recomendacion> getRecomendaciones() {
