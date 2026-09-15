@@ -59,16 +59,24 @@ public class PersistenciaCSV {
                     LocalDate fechaArriendo = LocalDate.parse(partes[2]);
                     boolean devuelto = Boolean.parseBoolean(partes[4]);
 
-                    Cliente cliente = videoClub.buscarCliente(idCliente);
-                    Pelicula pelicula = videoClub.buscarPelicula(idPelicula);
-                    if (cliente == null || pelicula == null) continue;
+                    try {
 
-                    Arriendo a = new Arriendo(cliente, pelicula, fechaArriendo);
-                    a.setDevuelto(devuelto);
-                    if (devuelto && !partes[3].equals("null")) {
-                        a.setFechaDevolucion(LocalDate.parse(partes[3]));
+                        Cliente cliente = videoClub.buscarCliente(idCliente);
+                        Pelicula pelicula = videoClub.buscarPelicula(idPelicula);
+
+                        Arriendo a = new Arriendo(cliente, pelicula, fechaArriendo);
+
+                        a.setDevuelto(devuelto);
+
+                        if (devuelto && !partes[3].equals("null")) {
+                            a.setFechaDevolucion(LocalDate.parse(partes[3]));
+                        }
+
+                        videoClub.agregarArriendo(a);
+
+                    } catch (ClienteNoEncontradoException | PeliculaNoDisponibleException e) {
+                        System.out.println("No se pudo cargar el arriendo: " + e.getMessage());
                     }
-                    videoClub.agregarArriendo(a);
                 }
             }
         }
@@ -90,16 +98,20 @@ public class PersistenciaCSV {
                     int idPelicula = Integer.parseInt(partes[1]);
                     boolean exitosa = Boolean.parseBoolean(partes[2]);
 
-                    Cliente cliente = videoClub.buscarCliente(idCliente);
-                    Pelicula pelicula = videoClub.buscarPelicula(idPelicula);
+                    try {
 
-                    if (cliente == null || pelicula == null) continue;
+                        Cliente cliente = videoClub.buscarCliente(idCliente);
+                        Pelicula pelicula = videoClub.buscarPelicula(idPelicula);
 
-                    Recomendacion r = new Recomendacion(cliente, pelicula);
+                        Recomendacion r = new Recomendacion(cliente, pelicula);
 
-                    r.setExitosa(exitosa);
+                        r.setExitosa(exitosa);
 
-                    videoClub.agregarRecomendacion(r);
+                        videoClub.agregarRecomendacion(r);
+
+                    } catch (ClienteNoEncontradoException | PeliculaNoDisponibleException e) {
+                        System.out.println("No se pudo cargar la recomendacion: " + e.getMessage());
+                    }
                 }
             }
         }

@@ -26,7 +26,7 @@ public class VideoClub{
         if (cliente == null) {
             throw new ClienteNoEncontradoException(idCliente);
         }
-        return clientes.get(idCliente);
+        return cliente;
     }
 
     public void registrarPelicula(Pelicula pelicula) {
@@ -48,9 +48,15 @@ public class VideoClub{
         buscarCliente(idCliente);
 
         for (Arriendo arriendo : arriendos) {
-            if (arriendo.getCliente().getIdCliente() == idCliente &&
-                !arriendo.isDevuelto()) {
 
+            if (arriendo.getCliente().getIdCliente() == idCliente) {
+                return false;
+            }
+        }
+
+        for (Recomendacion recomendacion : recomendaciones) {
+
+            if (recomendacion.getCliente().getIdCliente() == idCliente) {
                 return false;
             }
         }
@@ -65,14 +71,14 @@ public class VideoClub{
 
         for (Arriendo arriendo : arriendos) {
 
-            if (arriendo.getCliente().getIdCliente() == idCliente) {
+            if (arriendo.getPelicula().getIdPelicula() == idPelicula) {
                 return false;
             }
         }
 
         for (Recomendacion recomendacion : recomendaciones) {
 
-            if (recomendacion.getCliente().getIdCliente() == idCliente) {
+            if (recomendacion.getPelicula().getIdPelicula() == idPelicula) {
                 return false;
             }
         }
