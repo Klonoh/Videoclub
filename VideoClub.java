@@ -1,42 +1,42 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VideoClub{
-    private ArrayList<Cliente> clientes;
-    private ArrayList<Pelicula> peliculas;
+    private Map<Integer, Cliente> clientes;
+    private Map<Integer, Pelicula> peliculas;
     private ArrayList<Arriendo> arriendos;
     private ArrayList<Recomendacion> recomendaciones;
 
     public VideoClub() {
-        clientes = new ArrayList<>();
-        peliculas = new ArrayList<>();
+        clientes = new HashMap<>();
+        peliculas = new HashMap<>();
         arriendos = new ArrayList<>();
         recomendaciones = new ArrayList<>();
     }
 
     public void agregarCliente(Cliente cliente) {
-        clientes.add(cliente);
+        clientes.put(cliente.getIdCliente(), cliente);
     }
 
     public Cliente buscarCliente(int idCliente) {
-        for (Cliente cliente : clientes) {
-            if (cliente.getIdCliente() == idCliente) {
-                return cliente;
-            }
-        }
-        return null;
+        return clientes.get(idCliente);
     }
 
     public void registrarPelicula(Pelicula pelicula) {
-        peliculas.add(pelicula);
+        peliculas.put(pelicula.getIdPelicula(), pelicula);
     }
 
     public Pelicula buscarPelicula(int idPelicula) {
-        for (Pelicula pelicula : peliculas) {
-            if (pelicula.getIdPelicula() == idPelicula) {
-                return pelicula;
-            }
-        }
-        return null;
+        return peliculas.get(idPelicula);
+    }
+
+    public void eliminarCliente(int idCliente) {
+        clientes.remove(idCliente);
+    }
+
+    public void eliminarPelicula(int idPelicula) {
+        peliculas.remove(idPelicula);
     }
 
     public void realizarArriendo(int idCliente, int idPelicula) {
