@@ -43,17 +43,13 @@ public class VideoClub{
         return peliculas.get(idPelicula);
     }
 
-    public boolean eliminarCliente(int idCliente) {
+    public boolean eliminarCliente(int idCliente) throws ClienteNoEncontradoException {
 
-        Cliente cliente = buscarCliente(idCliente);
-
-        if (cliente == null) {
-            return false;
-        }
+        buscarCliente(idCliente);
 
         for (Arriendo arriendo : arriendos) {
-
-            if (arriendo.getCliente().getIdCliente() == idCliente && !arriendo.isDevuelto()) {
+            if (arriendo.getCliente().getIdCliente() == idCliente &&
+                !arriendo.isDevuelto()) {
 
                 return false;
             }
@@ -63,18 +59,20 @@ public class VideoClub{
         return true;
     }
 
-    public boolean eliminarPelicula(int idPelicula) {
+    public boolean eliminarPelicula(int idPelicula) throws PeliculaNoDisponibleException {
 
-        Pelicula pelicula = buscarPelicula(idPelicula);
-
-        if (pelicula == null) {
-            return false;
-        }
+        buscarPelicula(idPelicula);
 
         for (Arriendo arriendo : arriendos) {
 
-            if (arriendo.getPelicula().getIdPelicula() == idPelicula && !arriendo.isDevuelto()) {
+            if (arriendo.getCliente().getIdCliente() == idCliente) {
+                return false;
+            }
+        }
 
+        for (Recomendacion recomendacion : recomendaciones) {
+
+            if (recomendacion.getCliente().getIdCliente() == idCliente) {
                 return false;
             }
         }

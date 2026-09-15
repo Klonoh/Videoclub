@@ -43,4 +43,11 @@ public class Cliente{
         this.contacto = contacto;
     }
 
+    @Override
+    public String toString() {
+        return "ID: " + idCliente +
+            " | Nombre: " + nombre + " " + apellido +
+            " | Contacto: " + contacto;
+    }
+
 }

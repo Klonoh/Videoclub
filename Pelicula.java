@@ -80,4 +80,14 @@ public class Pelicula{
     public void disminuirStock() {
         stockDisponible--;
     }
+
+    @Override
+    public String toString() {
+        return "ID: " + idPelicula +
+            " | Titulo: " + titulo +
+            " | Director: " + director +
+            " | Genero: " + genero +
+            " | Año: " + fechaEstreno +
+            " | Stock: " + stockDisponible + "/" + stockTotal;
+    }
 }
