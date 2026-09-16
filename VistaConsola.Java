@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+
 public class VistaConsola {
     private VideoClub videoClub;
     private Scanner scanner;
@@ -6,6 +8,7 @@ public class VistaConsola {
         this.videoClub = videoClub;
         this.scanner = new Scanner(System.in);
     }
+
     public void iniciar(){
         int opcion;
         do {
@@ -13,46 +16,78 @@ public class VistaConsola {
             opcion = scanner.nextInt();
             scanner.nextLine();
             switch (opcion) {
+
                 case 1:
                     agregarCliente();
                     break;
+
                 case 2:
                     agregarPelicula();
                     break;
+
                 case 3:
-                    realizarArriendo();
+                    listarClientes();
                     break;
+
                 case 4:
-                    realizarDevolucion();
+                    listarPeliculas();
                     break;
+
                 case 5:
                     buscarCliente();
                     break;
+
                 case 6:
                     buscarPelicula();
                     break;
+
                 case 7:
                     eliminarCliente();
                     break;
+
+                case 8:
+                    eliminarPelicula();
+                    break;
+
+                case 9:
+                    realizarArriendo();
+                    break;
+
+                case 10:
+                    realizarDevolucion();
+                    break;
+
                 case 0:
                     System.out.println("Saliendo del sistema...");
                     break;
-                default: 
-                    System.out.println("Opción inválida. Intente nuevamente.");                        
+
+                default:
+                    System.out.println("Opcion invalida.");
             }
         }while (opcion != 0);
     }
-    private void mostrarMenu(){
+    private void mostrarMenu() {
+
         System.out.println("\n=== Video Club ===");
+
         System.out.println("1. Agregar Cliente");
-        System.out.println("2. Agregar Película");
-        System.out.println("3. Realizar Arriendo");
-        System.out.println("4. Realizar Devolución");
+        System.out.println("2. Agregar Pelicula");
+
+        System.out.println("3. Listar Clientes");
+        System.out.println("4. Listar Peliculas");
+
         System.out.println("5. Buscar Cliente");
-        System.out.println("6. Buscar Película");
+        System.out.println("6. Buscar Pelicula");
+
         System.out.println("7. Eliminar Cliente");
+        System.out.println("8. Eliminar Pelicula");
+
+        System.out.println("9. Realizar Arriendo");
+        System.out.println("10. Realizar Devolucion");
+
         System.out.println("0. Salir");
-        System.out.print("Seleccione una opción: ");
+
+        System.out.print("Seleccione una opcion: ");
     }
     private void agregarCliente(){
         System.out.print("ID del cliente: ");
@@ -121,10 +156,7 @@ public class VistaConsola {
          try{
             Cliente cliente = videoClub.buscarCliente(idCliente);
             System.out.println("Cliente encontrado:");
-            System.out.println("ID: " + cliente.getIdCliente());
-            System.out.println("Nombre: " + cliente.getNombre());
-            System.out.println("Apellido: " + cliente.getApellido());
-            System.out.println("Contacto: " + cliente.getContacto());
+            System.out.println(cliente);
          } catch (ClienteNoEncontradoException e) {
             System.out.println("Error: Cliente no encontrado.");
          }
@@ -136,12 +168,7 @@ public class VistaConsola {
         try{
             Pelicula pelicula = videoClub.buscarPelicula(idPelicula);
             System.out.println("Película encontrada:");
-            System.out.println("ID: " + pelicula.getIdPelicula());
-            System.out.println("Título: " + pelicula.getTitulo());
-            System.out.println("Género: " + pelicula.getGenero());
-            System.out.println("Año de estreno: " + pelicula.getFechaEstreno());
-            System.out.println("Director: " + pelicula.getDirector());
-            System.out.println("Stock disponible: " + pelicula.getStockDisponible());
+            System.out.println(pelicula);
         } catch (PeliculaNoDisponibleException e) {
             System.out.println("Error: Película no disponible.");
         }
@@ -150,14 +177,68 @@ public class VistaConsola {
         System.out.print("ID del cliente a eliminar: ");
         int idCliente = scanner.nextInt();
         scanner.nextLine();
-        videoClub.eliminarCliente(idCliente);
-        System.out.println("Cliente eliminado exitosamente.");
+
+        try {
+            boolean eliminado = videoClub.eliminarCliente(idCliente);
+
+            if (eliminado) {
+                System.out.println("Cliente eliminado exitosamente.");
+            } else {
+                System.out.println("No se puede eliminar el cliente porque posee historial asociado.");
+            }
+
+        } catch (ClienteNoEncontradoException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
     private void eliminarPelicula() {
         System.out.print("ID de la película a eliminar: ");
         int idPelicula = scanner.nextInt();
         scanner.nextLine();
-        videoClub.eliminarPelicula(idPelicula);
-        System.out.println("Película eliminada exitosamente.");
+        
+        try {
+            boolean eliminado = videoClub.eliminarPelicula(idPelicula);
+
+            if (eliminado) {
+                System.out.println("Película eliminada exitosamente.");
+            } else {
+                System.out.println("No se puede eliminar la película porque posee historial asociado.");
+            }
+
+        } catch (PeliculaNoDisponibleException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void listarClientes() {
+
+        System.out.println("\n=== Lista de Clientes ===");
+
+        ArrayList<Cliente> clientes = videoClub.listarClientes();
+
+        if (clientes.isEmpty()) {
+            System.out.println("No hay clientes registrados.");
+            return;
+        }
+
+        for (Cliente cliente : clientes) {
+            System.out.println(cliente);
+        }
+    }
+
+    private void listarPeliculas() {
+
+        System.out.println("\n=== Lista de Peliculas ===");
+
+        ArrayList<Pelicula> peliculas = videoClub.listarPeliculas();
+
+        if (peliculas.isEmpty()) {
+            System.out.println("No hay peliculas registradas.");
+            return;
+        }
+
+        for (Pelicula pelicula : peliculas) {
+            System.out.println(pelicula);
+        }
     }
 }    
