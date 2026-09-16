@@ -323,4 +323,28 @@ public class VistaConsola {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    public VideoClub getVideoClub() {
+        return videoClub;
+    }
+
+    public void setVideoClub(VideoClub videoClub) {
+        this.videoClub = videoClub;
+    }
+
+    public Scanner getScanner() {
+        return scanner;
+    }
+
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public Formateador getFormateador() {
+        return formateador;
+    }
+
+    public void setFormateador(Formateador formateador) {
+        this.formateador = formateador;
+    }
 }    

@@ -19,6 +19,40 @@ public class VideoClub{
         recomendaciones = new ArrayList<>();
     }
 
+    public Map<Integer, Cliente> getClientes() {
+        return clientes;
+    }
+
+    public void setClientes(Map<Integer, Cliente> clientes) {
+        this.clientes = clientes;
+    }
+
+    public Map<Integer, Pelicula> getPeliculas() {
+        return peliculas;
+    }
+
+    public void setPeliculas(Map<Integer, Pelicula> peliculas) {
+        this.peliculas = peliculas;
+    }
+
+    public ArrayList<Arriendo> getArriendos() {
+        return arriendos;
+    }
+
+    public void setArriendos(ArrayList<Arriendo> arriendos) {
+        this.arriendos = arriendos;
+    }
+
+    public Map<Integer, List<Arriendo>> getHistorialClientes() {
+        return historialClientes;
+    }
+
+    public void setHistorialClientes(
+            Map<Integer, List<Arriendo>> historialClientes) {
+
+        this.historialClientes = historialClientes;
+    }
+
     public void agregarCliente(Cliente cliente) {
         clientes.put(cliente.getIdCliente(), cliente);
     }
