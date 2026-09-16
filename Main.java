@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
 
@@ -18,10 +19,29 @@ public class Main {
             );
         }
 
-        VistaGrafica vista = new VistaGrafica(videoClub);
+        Scanner scanner = new Scanner(System.in);
 
-        vista.iniciar();
+        System.out.println("=== Video Club ===");
+        System.out.println("1. Usar Consola");
+        System.out.println("2. Usar Ventanas");
+        System.out.print("Seleccione modo: ");
 
+        int modo = scanner.nextInt();
+
+        if (modo == 1) {
+
+            VistaConsola vista = new VistaConsola(videoClub);
+            vista.iniciar();
+
+        } else if (modo == 2) {
+
+            VistaGrafica vista = new VistaGrafica(videoClub);
+            vista.iniciar();
+
+        } else {
+
+            System.out.println("Opcion invalida.");
+        }
         try {
 
             persistencia.guardarDatos(videoClub);
