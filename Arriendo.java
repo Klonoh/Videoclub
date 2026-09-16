@@ -24,6 +24,18 @@ public class Arriendo {
         this.devuelto = false;
     }
 
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public void setPelicula(Pelicula pelicula) {
+        this.pelicula = pelicula;
+    }
+
+    public void setFechaArriendo(LocalDate fechaArriendo) {
+        this.fechaArriendo = fechaArriendo;
+    }
+
     public Cliente getCliente() {
         return cliente;
     }

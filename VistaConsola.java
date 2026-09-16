@@ -67,6 +67,10 @@ public class VistaConsola {
                     realizarDevolucion();
                     break;
 
+                case 13:
+                    generarRecomendaciones();
+                    break;
+
                 case 0:
                     System.out.println("Saliendo del sistema...");
                     break;
@@ -97,6 +101,7 @@ public class VistaConsola {
 
         System.out.println("11. Realizar Arriendo");
         System.out.println("12. Realizar Devolucion");
+        System.out.println("13. Generar Recomendaciones");
 
         System.out.println("0. Salir");
 
@@ -162,6 +167,49 @@ public class VistaConsola {
         videoClub.realizarDevolucion(idCliente, idPelicula);
         System.out.println("Devolución realizada exitosamente.");
     }
+
+    private void generarRecomendaciones() {
+
+        try {
+
+            System.out.print("ID del cliente: ");
+            int idCliente = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Cantidad de recomendaciones: ");
+            int cantidad = scanner.nextInt();
+            scanner.nextLine();
+
+            if (cantidad <= 0) {
+                System.out.println("La cantidad debe ser mayor a cero.");
+                return;
+            }
+
+            Cliente cliente = videoClub.buscarCliente(idCliente);
+
+            ArrayList<Pelicula> recomendadas =
+                    videoClub.generarRecomendaciones(idCliente, cantidad);
+
+            System.out.println("\n=== Recomendaciones para " + cliente.getNombre() + " ===");
+
+            if (recomendadas.isEmpty()) {
+                System.out.println("No hay peliculas para recomendar en este momento.");
+                return;
+            }
+
+            for (Pelicula pelicula : recomendadas) {
+                System.out.println(formateador.formatear(pelicula));
+            }
+
+        } catch (ClienteNoEncontradoException e) {
+            System.out.println("Error: " + e.getMessage());
+
+        } catch (java.util.InputMismatchException e) {
+            System.out.println("Error: debe ingresar un numero valido.");
+            scanner.nextLine();
+        }
+    }
+
     private void buscarCliente(){
         System.out.print("ID del cliente: ");
         int idCliente = scanner.nextInt();
@@ -322,5 +370,29 @@ public class VistaConsola {
 
             System.out.println("Error: " + e.getMessage());
         }
+    }
+
+    public VideoClub getVideoClub() {
+        return videoClub;
+    }
+
+    public void setVideoClub(VideoClub videoClub) {
+        this.videoClub = videoClub;
+    }
+
+    public Scanner getScanner() {
+        return scanner;
+    }
+
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public Formateador getFormateador() {
+        return formateador;
+    }
+
+    public void setFormateador(Formateador formateador) {
+        this.formateador = formateador;
     }
 }    

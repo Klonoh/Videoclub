@@ -167,5 +167,36 @@ public class PersistenciaCSV {
         videoClub.registrarPelicula(new Pelicula(103, "Coco", "Lee Unkrich", "Animacion", 2017, 4));
         videoClub.registrarPelicula(new Pelicula(104, "Mad Max: Fury Road", "G. Miller", "Accion", 2015, 2));
         videoClub.registrarPelicula(new Pelicula(105, "El Padrino II", "F. Coppola", "Drama", 1974, 2));
+    
+        try {
+
+            // Historial de Sebastian: arrendo Inception y ya la devolvio.
+            videoClub.realizarArriendo(1, 101);
+            videoClub.realizarDevolucion(1, 101);
+
+            // Camila mantiene Coco arrendada.
+            videoClub.realizarArriendo(2, 103);
+
+            // Se registra una recomendacion para Sebastian.
+            Cliente cliente = videoClub.buscarCliente(1);
+            Pelicula pelicula = videoClub.buscarPelicula(102);
+
+            videoClub.agregarRecomendacion(
+                new Recomendacion(cliente, pelicula)
+            );
+
+            // Al arrendar la pelicula recomendada,
+            // la recomendacion pasa a ser exitosa.
+            videoClub.realizarArriendo(1, 102);
+
+        } catch (ClienteNoEncontradoException |
+                PeliculaNoDisponibleException e) {
+
+            System.out.println(
+                "Error al cargar datos iniciales: " + e.getMessage()
+            );
+        }
+    
+    
     }
 }

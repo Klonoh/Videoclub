@@ -8,15 +8,37 @@ public class VideoClub{
     private Map<Integer, Cliente> clientes;
     private Map<Integer, Pelicula> peliculas;
     private ArrayList<Arriendo> arriendos;
-    private Map<Integer, List<Arriendo>> historialClientes;
     private ArrayList<Recomendacion> recomendaciones;
 
     public VideoClub() {
         clientes = new HashMap<>();
         peliculas = new HashMap<>();
         arriendos = new ArrayList<>();
-        historialClientes = new HashMap<>();
         recomendaciones = new ArrayList<>();
+    }
+
+    public Map<Integer, Cliente> getClientes() {
+        return clientes;
+    }
+
+    public void setClientes(Map<Integer, Cliente> clientes) {
+        this.clientes = clientes;
+    }
+
+    public Map<Integer, Pelicula> getPeliculas() {
+        return peliculas;
+    }
+
+    public void setPeliculas(Map<Integer, Pelicula> peliculas) {
+        this.peliculas = peliculas;
+    }
+
+    public ArrayList<Arriendo> getArriendos() {
+        return arriendos;
+    }
+
+    public void setArriendos(ArrayList<Arriendo> arriendos) {
+        this.arriendos = arriendos;
     }
 
     public void agregarCliente(Cliente cliente) {
@@ -101,8 +123,10 @@ public class VideoClub{
     }
 
     public void agregarArriendo(Arriendo arriendo) {
+
         arriendos.add(arriendo);
-        historialClientes.computeIfAbsent(arriendo.getCliente().getIdCliente(), k -> new ArrayList<>()).add(arriendo);
+
+        arriendo.getCliente().agregarArriendo(arriendo);
     }
 
     public void agregarRecomendacion(Recomendacion recomendacion) {
@@ -150,7 +174,17 @@ public class VideoClub{
     }
 
     public ArrayList<Arriendo> obtenerHistorialCliente(int idCliente) {
-        return new ArrayList<>(historialClientes.getOrDefault(idCliente, new ArrayList<>()));
+
+        try {
+
+            Cliente cliente = buscarCliente(idCliente);
+
+            return new ArrayList<>(cliente.getHistorial());
+
+        } catch (ClienteNoEncontradoException e) {
+
+            return new ArrayList<>();
+        }
     }
 
     public ArrayList<Recomendacion> getRecomendaciones() {
@@ -173,6 +207,7 @@ public class VideoClub{
         return arriendos;
     }
 
+    // Calcula las preferencias del cliente contando cuántas veces ha arrendado películas de cada género.
     public Map<String, Integer> obtenerPreferenciasGenero(int idCliente) {
 
         Map<String, Integer> preferencias = new HashMap<>();
@@ -269,6 +304,7 @@ public class VideoClub{
         return false;
     }
 
+    // Para clientes sin historial se priorizan peliculas con mayor cantidad de arriendos y exitos, sin importar el género.
     private ArrayList<Pelicula> generarRecomendacionesClienteNuevo(Cliente cliente,int cantidad) {
 
         Map<Pelicula, Integer> puntajes = new HashMap<>();
@@ -347,6 +383,7 @@ public class VideoClub{
 
             int puntajeExitos = obtenerExitosGenero(idCliente, genero);
 
+            // Las recomendaciones exitosas tienen doble peso respecto al historial normal del genero.
             int puntaje = puntajeHistorial + (2 * puntajeExitos);
 
             if (puntaje > 0) {
