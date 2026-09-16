@@ -374,5 +374,24 @@ public class VideoClub{
         return resultado;
     }
     
+    public void editarCliente(int idCliente,String nombre,String apellido,String contacto) throws ClienteNoEncontradoException {
+
+        Cliente cliente = buscarCliente(idCliente);
+
+        cliente.setNombre(nombre);
+        cliente.setApellido(apellido);
+        cliente.setContacto(contacto);
+    }
+
+    public void editarPelicula(int idPelicula, String titulo, String director, String genero, int fechaEstreno) throws PeliculaNoDisponibleException {
+
+        Pelicula pelicula = buscarPelicula(idPelicula);
+
+        pelicula.setTitulo(titulo);
+        pelicula.setDirector(director);
+        pelicula.setGenero(genero);
+        pelicula.setFechaEstreno(fechaEstreno);
+    }
+
 }
 

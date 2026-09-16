@@ -42,18 +42,26 @@ public class VistaConsola {
                     break;
 
                 case 7:
-                    eliminarCliente();
+                    editarCliente();
                     break;
 
                 case 8:
-                    eliminarPelicula();
+                    editarPelicula();
                     break;
-
+                    
                 case 9:
-                    realizarArriendo();
+                    eliminarCliente();
                     break;
 
                 case 10:
+                    eliminarPelicula();
+                    break;
+
+                case 11:
+                    realizarArriendo();
+                    break;
+
+                case 12:
                     realizarDevolucion();
                     break;
 
@@ -79,11 +87,14 @@ public class VistaConsola {
         System.out.println("5. Buscar Cliente");
         System.out.println("6. Buscar Pelicula");
 
-        System.out.println("7. Eliminar Cliente");
-        System.out.println("8. Eliminar Pelicula");
+        System.out.println("7. Editar Cliente");
+        System.out.println("8. Editar Pelicula");
 
-        System.out.println("9. Realizar Arriendo");
-        System.out.println("10. Realizar Devolucion");
+        System.out.println("9. Eliminar Cliente");
+        System.out.println("10. Eliminar Pelicula");
+
+        System.out.println("11. Realizar Arriendo");
+        System.out.println("12. Realizar Devolucion");
 
         System.out.println("0. Salir");
 
@@ -239,6 +250,75 @@ public class VistaConsola {
 
         for (Pelicula pelicula : peliculas) {
             System.out.println(formatear(pelicula));
+        }
+    }
+
+    private void editarCliente() {
+
+        System.out.print("ID del cliente a editar: ");
+        int idCliente = scanner.nextInt();
+        scanner.nextLine();
+
+        try {
+
+            Cliente cliente = videoClub.buscarCliente(idCliente);
+
+            System.out.println("Cliente actual:");
+            System.out.println(formatear(cliente));
+
+            System.out.print("Nuevo nombre: ");
+            String nombre = scanner.nextLine();
+
+            System.out.print("Nuevo apellido: ");
+            String apellido = scanner.nextLine();
+
+            System.out.print("Nuevo contacto: ");
+            String contacto = scanner.nextLine();
+
+            videoClub.editarCliente(idCliente,nombre,apellido,contacto);
+
+            System.out.println("Cliente modificado exitosamente.");
+
+        } catch (ClienteNoEncontradoException e) {
+
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void editarPelicula() {
+
+        System.out.print("ID de la pelicula a editar: ");
+        int idPelicula = scanner.nextInt();
+        scanner.nextLine();
+
+        try {
+
+            Pelicula pelicula =
+                videoClub.buscarPelicula(idPelicula);
+
+            System.out.println("Pelicula actual:");
+            System.out.println(formatear(pelicula));
+
+            System.out.print("Nuevo titulo: ");
+            String titulo = scanner.nextLine();
+
+            System.out.print("Nuevo director: ");
+            String director = scanner.nextLine();
+
+            System.out.print("Nuevo genero: ");
+            String genero = scanner.nextLine();
+
+            System.out.print("Nuevo año de estreno: ");
+            int fechaEstreno = scanner.nextInt();
+            scanner.nextLine();
+
+            videoClub.editarPelicula(idPelicula,titulo,director,genero,fechaEstreno);
+
+            System.out.println("Pelicula modificada exitosamente.");
+
+        } catch (PeliculaNoDisponibleException e) {
+
+            System.out.println("Error: " + e.getMessage());
         }
     }
 }    
