@@ -18,7 +18,7 @@ public class Main {
             );
         }
 
-        VistaConsola vista = new VistaConsola(videoClub);
+        VistaGrafica vista = new VistaGrafica(videoClub);
 
         vista.iniciar();
 
