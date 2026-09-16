@@ -207,6 +207,7 @@ public class VideoClub{
         return arriendos;
     }
 
+    // Calcula las preferencias del cliente contando cuántas veces ha arrendado películas de cada género.
     public Map<String, Integer> obtenerPreferenciasGenero(int idCliente) {
 
         Map<String, Integer> preferencias = new HashMap<>();
@@ -303,6 +304,7 @@ public class VideoClub{
         return false;
     }
 
+    // Para clientes sin historial se priorizan peliculas con mayor cantidad de arriendos y exitos, sin importar el género.
     private ArrayList<Pelicula> generarRecomendacionesClienteNuevo(Cliente cliente,int cantidad) {
 
         Map<Pelicula, Integer> puntajes = new HashMap<>();
@@ -381,6 +383,7 @@ public class VideoClub{
 
             int puntajeExitos = obtenerExitosGenero(idCliente, genero);
 
+            // Las recomendaciones exitosas tienen doble peso respecto al historial normal del genero.
             int puntaje = puntajeHistorial + (2 * puntajeExitos);
 
             if (puntaje > 0) {
