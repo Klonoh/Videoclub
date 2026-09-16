@@ -10,6 +10,14 @@ public class Recomendacion {
         this.exitosa = false;
     }
 
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public void setPelicula(Pelicula pelicula) {
+        this.pelicula = pelicula;
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
