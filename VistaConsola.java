@@ -4,9 +4,11 @@ import java.util.ArrayList;
 public class VistaConsola {
     private VideoClub videoClub;
     private Scanner scanner;
+    private Formateador formateador;
     public VistaConsola(VideoClub videoClub) {
         this.videoClub = videoClub;
         this.scanner = new Scanner(System.in);
+        this.formateador = new Formateador();
     }
 
     public void iniciar(){
@@ -167,7 +169,7 @@ public class VistaConsola {
          try{
             Cliente cliente = videoClub.buscarCliente(idCliente);
             System.out.println("Cliente encontrado:");
-            System.out.println(formatear(cliente));
+             System.out.println(formateador.formatear(cliente));
          } catch (ClienteNoEncontradoException e) {
             System.out.println("Error: Cliente no encontrado.");
          }
@@ -179,7 +181,7 @@ public class VistaConsola {
         try{
             Pelicula pelicula = videoClub.buscarPelicula(idPelicula);
             System.out.println("Película encontrada:");
-            System.out.println(formatear(pelicula));
+            System.out.println(formateador.formatear(pelicula));
         } catch (PeliculaNoDisponibleException e) {
             System.out.println("Error: Película no disponible.");
         }
@@ -233,7 +235,7 @@ public class VistaConsola {
         }
 
         for (Cliente cliente : clientes) {
-            System.out.println(formatear(cliente));
+            System.out.println(formateador.formatear(cliente));
         }
     }
 
@@ -249,7 +251,7 @@ public class VistaConsola {
         }
 
         for (Pelicula pelicula : peliculas) {
-            System.out.println(formatear(pelicula));
+            System.out.println(formateador.formatear(pelicula));
         }
     }
 
@@ -264,7 +266,7 @@ public class VistaConsola {
             Cliente cliente = videoClub.buscarCliente(idCliente);
 
             System.out.println("Cliente actual:");
-            System.out.println(formatear(cliente));
+            System.out.println(formateador.formatear(cliente));
 
             System.out.print("Nuevo nombre: ");
             String nombre = scanner.nextLine();
@@ -297,7 +299,7 @@ public class VistaConsola {
                 videoClub.buscarPelicula(idPelicula);
 
             System.out.println("Pelicula actual:");
-            System.out.println(formatear(pelicula));
+            System.out.println(formateador.formatear(pelicula));
 
             System.out.print("Nuevo titulo: ");
             String titulo = scanner.nextLine();
