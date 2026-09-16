@@ -15,7 +15,36 @@ public class VistaGrafica{
     public void iniciar(){
         ventana  = new JFrame("Video Club");
         ventana.setSize(700,550);
-        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ventana.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        ventana.addWindowListener(
+            new java.awt.event.WindowAdapter() {
+
+                @Override
+                public void windowClosing(
+                        java.awt.event.WindowEvent e) {
+
+                    try {
+
+                        PersistenciaCSV persistencia =
+                            new PersistenciaCSV();
+
+                        persistencia.guardarDatos(
+                            videoClub
+                        );
+
+                        ventana.dispose();
+                        System.exit(0);
+
+                    } catch (IOException ex) {
+
+                        mostrarError(
+                            "No se pudieron guardar los datos: "
+                            + ex.getMessage()
+                        );
+                    }
+                }
+            }
+        );
         ventana.setLocationRelativeTo(null);
         JPanel panelPrincipal = new JPanel(new BorderLayout(10,10));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));

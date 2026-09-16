@@ -33,25 +33,28 @@ public class Main {
             VistaConsola vista = new VistaConsola(videoClub);
             vista.iniciar();
 
+            try {
+
+                persistencia.guardarDatos(videoClub);
+
+            } catch (IOException e) {
+
+                System.out.println(
+                    "Error al guardar los datos: "
+                    + e.getMessage()
+                );
+            }
+
         } else if (modo == 2) {
 
-            VistaGrafica vista = new VistaGrafica(videoClub);
+            VistaGrafica vista =
+                new VistaGrafica(videoClub);
+
             vista.iniciar();
 
         } else {
 
             System.out.println("Opcion invalida.");
         }
-        try {
-
-            persistencia.guardarDatos(videoClub);
-
-        } catch (IOException e) {
-
-            System.out.println(
-                "Error al guardar los datos: " + e.getMessage()
-            );
-        }
     }
 }
-
