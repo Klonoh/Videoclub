@@ -15,9 +15,15 @@ public class PersistenciaCSV {
     public void cargarDatos(VideoClub videoClub) throws IOException {
         File fClientes = new File(ARCHIVO_CLIENTES);
         File fPeliculas = new File(ARCHIVO_PELICULAS);
+        File fArriendos = new File(ARCHIVO_ARRIENDOS);
+        File fRecomendaciones = new File(ARCHIVO_RECOMENDACIONES);
 
-        if (!fClientes.exists() && !fPeliculas.exists()) {
+        boolean primeraEjecucion = !fClientes.exists() && !fPeliculas.exists() && !fArriendos.exists() && !fRecomendaciones.exists();
+
+        if (primeraEjecucion) {
+
             cargarDatosIniciales(videoClub);
+            guardarDatos(videoClub);
             return;
         }
 
@@ -47,7 +53,7 @@ public class PersistenciaCSV {
             }
         }
 
-        File fArriendos = new File(ARCHIVO_ARRIENDOS);
+        
         if (fArriendos.exists()) {
             try (BufferedReader br = new BufferedReader(new FileReader(fArriendos))) {
                 String linea;
@@ -81,7 +87,6 @@ public class PersistenciaCSV {
             }
         }
 
-        File fRecomendaciones = new File(ARCHIVO_RECOMENDACIONES);
 
         if (fRecomendaciones.exists()) {
             try (BufferedReader br =
