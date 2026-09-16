@@ -1,18 +1,21 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.time.LocalDate;
 
 public class VideoClub{
     private Map<Integer, Cliente> clientes;
     private Map<Integer, Pelicula> peliculas;
     private ArrayList<Arriendo> arriendos;
+    private Map<Integer, List<Arriendo>> historialClientes;
     private ArrayList<Recomendacion> recomendaciones;
 
     public VideoClub() {
         clientes = new HashMap<>();
         peliculas = new HashMap<>();
         arriendos = new ArrayList<>();
+        historialClientes = new HashMap<>();
         recomendaciones = new ArrayList<>();
     }
 
@@ -89,6 +92,7 @@ public class VideoClub{
 
     public void agregarArriendo(Arriendo arriendo) {
         arriendos.add(arriendo);
+        historialClientes.computeIfAbsent(arriendo.getCliente().getIdCliente(), k -> new ArrayList<>()).add(arriendo);
     }
 
     public void agregarRecomendacion(Recomendacion recomendacion) {
@@ -108,7 +112,7 @@ public class VideoClub{
 
             Arriendo arriendo = new Arriendo(cliente, pelicula);
 
-            arriendos.add(arriendo);
+            agregarArriendo(arriendo);
             pelicula.disminuirStock();
 
             for (Recomendacion recomendacion : recomendaciones) {
@@ -136,16 +140,7 @@ public class VideoClub{
     }
 
     public ArrayList<Arriendo> obtenerHistorialCliente(int idCliente) {
-
-        ArrayList<Arriendo> historial = new ArrayList<>();
-
-        for (Arriendo arriendo : arriendos) {
-            if (arriendo.getCliente().getIdCliente() == idCliente) {
-                historial.add(arriendo);
-            }
-        }
-
-        return historial;
+        return new ArrayList<>(historialClientes.getOrDefault(idCliente, new ArrayList<>()));
     }
 
     public ArrayList<Recomendacion> getRecomendaciones() {
@@ -206,6 +201,36 @@ public class VideoClub{
         return exitos;
     }
 
+    private int obtenerCantidadArriendos(int idPelicula) {
+
+        int cantidad = 0;
+
+        for (Arriendo arriendo : arriendos) {
+
+            if (arriendo.getPelicula().getIdPelicula() == idPelicula) {
+                cantidad++;
+            }
+        }
+
+        return cantidad;
+    }
+
+    private int obtenerExitosPelicula(int idPelicula) {
+
+        int exitos = 0;
+
+        for (Recomendacion recomendacion : recomendaciones) {
+
+            if (recomendacion.getPelicula().getIdPelicula() == idPelicula &&
+                recomendacion.isExitosa()) {
+
+                exitos++;
+            }
+        }
+
+        return exitos;
+    }
+
     private boolean tienePeliculaArrendada(int idCliente, int idPelicula) {
 
         for (Arriendo arriendo : arriendos) {
@@ -234,9 +259,48 @@ public class VideoClub{
         return false;
     }
 
-    private ArrayList<Pelicula> generarRecomendacionesClienteNuevo(Cliente cliente, int cantidad) {
-        // Implementación para generar recomendaciones para un cliente nuevo
-        return new ArrayList<>();
+    private ArrayList<Pelicula> generarRecomendacionesClienteNuevo(Cliente cliente,int cantidad) {
+
+        Map<Pelicula, Integer> puntajes = new HashMap<>();
+
+        for (Pelicula pelicula : peliculas.values()) {
+
+            if (!pelicula.hayStock()) {
+                continue;
+            }
+
+            if (yaFueRecomendada(cliente.getIdCliente(),pelicula.getIdPelicula())) {
+
+                continue;
+            }
+
+            int cantidadArriendos = obtenerCantidadArriendos(pelicula.getIdPelicula());
+
+            int exitos = obtenerExitosPelicula(pelicula.getIdPelicula());
+
+            int puntaje = cantidadArriendos + (2 * exitos);
+
+            puntajes.put(pelicula, puntaje);
+        }
+
+        ArrayList<Pelicula> candidatas = new ArrayList<>(puntajes.keySet());
+
+        candidatas.sort((p1, p2) -> Integer.compare(puntajes.get(p2),puntajes.get(p1)));
+
+        ArrayList<Pelicula> resultado = new ArrayList<>();
+
+        for (int i = 0; i < candidatas.size() && i < cantidad; i++) {
+
+            Pelicula pelicula = candidatas.get(i);
+
+            resultado.add(pelicula);
+
+            Recomendacion recomendacion = new Recomendacion(cliente, pelicula);
+
+            agregarRecomendacion(recomendacion);
+        }
+
+        return resultado;
     }
 
     public ArrayList<Pelicula> generarRecomendaciones(int idCliente, int cantidad) throws ClienteNoEncontradoException {
