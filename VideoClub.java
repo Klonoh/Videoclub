@@ -8,14 +8,12 @@ public class VideoClub{
     private Map<Integer, Cliente> clientes;
     private Map<Integer, Pelicula> peliculas;
     private ArrayList<Arriendo> arriendos;
-    private Map<Integer, List<Arriendo>> historialClientes;
     private ArrayList<Recomendacion> recomendaciones;
 
     public VideoClub() {
         clientes = new HashMap<>();
         peliculas = new HashMap<>();
         arriendos = new ArrayList<>();
-        historialClientes = new HashMap<>();
         recomendaciones = new ArrayList<>();
     }
 
@@ -41,16 +39,6 @@ public class VideoClub{
 
     public void setArriendos(ArrayList<Arriendo> arriendos) {
         this.arriendos = arriendos;
-    }
-
-    public Map<Integer, List<Arriendo>> getHistorialClientes() {
-        return historialClientes;
-    }
-
-    public void setHistorialClientes(
-            Map<Integer, List<Arriendo>> historialClientes) {
-
-        this.historialClientes = historialClientes;
     }
 
     public void agregarCliente(Cliente cliente) {
@@ -135,8 +123,10 @@ public class VideoClub{
     }
 
     public void agregarArriendo(Arriendo arriendo) {
+
         arriendos.add(arriendo);
-        historialClientes.computeIfAbsent(arriendo.getCliente().getIdCliente(), k -> new ArrayList<>()).add(arriendo);
+
+        arriendo.getCliente().agregarArriendo(arriendo);
     }
 
     public void agregarRecomendacion(Recomendacion recomendacion) {
@@ -184,7 +174,17 @@ public class VideoClub{
     }
 
     public ArrayList<Arriendo> obtenerHistorialCliente(int idCliente) {
-        return new ArrayList<>(historialClientes.getOrDefault(idCliente, new ArrayList<>()));
+
+        try {
+
+            Cliente cliente = buscarCliente(idCliente);
+
+            return new ArrayList<>(cliente.getHistorial());
+
+        } catch (ClienteNoEncontradoException e) {
+
+            return new ArrayList<>();
+        }
     }
 
     public ArrayList<Recomendacion> getRecomendaciones() {

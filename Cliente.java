@@ -1,14 +1,21 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cliente{
     private int idCliente;
     private String nombre;
     private String apellido;
     private String contacto;
 
+    private List<Arriendo> historial;
+
     public Cliente(int idCliente, String nombre, String apellido, String contacto) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.apellido = apellido;
         this.contacto = contacto;
+
+        this.historial = new ArrayList<>();
     }
 
     public int getIdCliente() {
@@ -41,6 +48,18 @@ public class Cliente{
 
     public void setContacto(String contacto) {
         this.contacto = contacto;
+    }
+
+    public List<Arriendo> getHistorial() {
+        return historial;
+    }
+
+    public void setHistorial(List<Arriendo> historial) {
+        this.historial = historial;
+    }
+
+    public void agregarArriendo(Arriendo arriendo) {
+        historial.add(arriendo);
     }
 
     @Override

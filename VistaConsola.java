@@ -67,6 +67,10 @@ public class VistaConsola {
                     realizarDevolucion();
                     break;
 
+                case 13:
+                    generarRecomendaciones();
+                    break;    
+
                 case 0:
                     System.out.println("Saliendo del sistema...");
                     break;
@@ -97,6 +101,8 @@ public class VistaConsola {
 
         System.out.println("11. Realizar Arriendo");
         System.out.println("12. Realizar Devolucion");
+
+        System.out.println("13. Generar Recomendaciones");
 
         System.out.println("0. Salir");
 
@@ -319,6 +325,45 @@ public class VistaConsola {
             System.out.println("Pelicula modificada exitosamente.");
 
         } catch (PeliculaNoDisponibleException e) {
+
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void generarRecomendaciones() {
+
+        System.out.print("ID del cliente: ");
+        int idCliente = scanner.nextInt();
+
+        System.out.print("Cantidad de recomendaciones: ");
+        int cantidad = scanner.nextInt();
+
+        scanner.nextLine();
+
+        if (cantidad <= 0) {
+            System.out.println("La cantidad de recomendaciones debe ser mayor a 0.");
+            return;
+        }
+
+        try {
+
+            ArrayList<Pelicula> recomendaciones = videoClub.generarRecomendaciones(idCliente,cantidad);
+
+            if (recomendaciones.isEmpty()) {
+
+                System.out.println("No hay recomendaciones disponibles para este cliente.");
+
+                return;
+            }
+
+            System.out.println("\n=== Recomendaciones para el cliente ===");
+
+            for (Pelicula pelicula : recomendaciones) {
+
+                System.out.println(formateador.formatear(pelicula));
+            }
+
+        } catch (ClienteNoEncontradoException e) {
 
             System.out.println("Error: " + e.getMessage());
         }
