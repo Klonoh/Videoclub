@@ -430,5 +430,50 @@ public class VideoClub{
         pelicula.setFechaEstreno(fechaEstreno);
     }
 
+    public ArrayList<Arriendo> listarArriendosCliente(int idCliente) throws ClienteNoEncontradoException {
+
+        Cliente cliente = buscarCliente(idCliente);
+
+        return new ArrayList<>(cliente.getHistorial());
+    }
+
+    public Arriendo buscarArriendo(int idCliente, int numero) throws ClienteNoEncontradoException {
+
+        Cliente cliente = buscarCliente(idCliente);
+
+        List<Arriendo> historial = cliente.getHistorial();
+
+        if (numero < 1 || numero > historial.size()) {
+            throw new IllegalArgumentException(
+                "No existe un arriendo con ese numero."
+            );
+        }
+
+        return historial.get(numero - 1);
+    }
+
+    public void editarArriendo(int idCliente, int numero, LocalDate nuevaFecha) throws ClienteNoEncontradoException {
+
+        Arriendo arriendo = buscarArriendo(idCliente, numero);
+
+        arriendo.setFechaArriendo(nuevaFecha);
+    }
+
+    public void eliminarArriendo(int idCliente, int numero) throws ClienteNoEncontradoException {
+
+        Arriendo arriendo = buscarArriendo(idCliente, numero);
+
+        if (!arriendo.isDevuelto()) {
+
+            Pelicula pelicula = arriendo.getPelicula();
+
+            pelicula.setStockDisponible(pelicula.getStockDisponible() + 1);
+        }
+
+        arriendos.remove(arriendo);
+
+        arriendo.getCliente().getHistorial().remove(arriendo);
+    }
+
 }
 

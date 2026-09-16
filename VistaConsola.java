@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class VistaConsola {
     private VideoClub videoClub;
@@ -71,6 +72,22 @@ public class VistaConsola {
                     generarRecomendaciones();
                     break;
 
+                case 14:
+                    listarArriendos();
+                    break;
+
+                case 15:
+                    buscarArriendo();
+                    break;
+
+                case 16:
+                    editarArriendo();
+                    break;
+
+                case 17:
+                    eliminarArriendo();
+                    break;
+
                 case 0:
                     System.out.println("Saliendo del sistema...");
                     break;
@@ -102,6 +119,11 @@ public class VistaConsola {
         System.out.println("11. Realizar Arriendo");
         System.out.println("12. Realizar Devolucion");
         System.out.println("13. Generar Recomendaciones");
+
+        System.out.println("14. Listar Arriendos");
+        System.out.println("15. Buscar Arriendo");
+        System.out.println("16. Editar Arriendo");
+        System.out.println("17. Eliminar Arriendo");
 
         System.out.println("0. Salir");
 
@@ -369,6 +391,211 @@ public class VistaConsola {
         } catch (PeliculaNoDisponibleException e) {
 
             System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void listarArriendos() {
+
+        try {
+
+            System.out.print("ID del cliente: ");
+            int idCliente = scanner.nextInt();
+            scanner.nextLine();
+
+            ArrayList<Arriendo> historial =
+                videoClub.listarArriendosCliente(idCliente);
+
+            if (historial.isEmpty()) {
+
+                System.out.println(
+                    "El cliente no posee arriendos."
+                );
+
+                return;
+            }
+
+            System.out.println(
+                "\n=== Historial de Arriendos ==="
+            );
+
+            for (int i = 0; i < historial.size(); i++) {
+
+                System.out.println(
+                    (i + 1) + ". " +
+                    formateador.formatear(
+                        historial.get(i)
+                    )
+                );
+            }
+
+        } catch (ClienteNoEncontradoException e) {
+
+            System.out.println(
+                "Error: " + e.getMessage()
+            );
+
+        } catch (java.util.InputMismatchException e) {
+
+            System.out.println(
+                "Error: debe ingresar un numero valido."
+            );
+
+            scanner.nextLine();
+        }
+    }
+
+    private void buscarArriendo() {
+
+        try {
+
+            System.out.print("ID del cliente: ");
+            int idCliente = scanner.nextInt();
+
+            System.out.print("Numero del arriendo: ");
+            int numero = scanner.nextInt();
+
+            scanner.nextLine();
+
+            Arriendo arriendo =
+                videoClub.buscarArriendo(
+                    idCliente,
+                    numero
+                );
+
+            System.out.println(
+                "\nArriendo encontrado:"
+            );
+
+            System.out.println(
+                formateador.formatear(arriendo)
+            );
+
+        } catch (ClienteNoEncontradoException |
+                IllegalArgumentException e) {
+
+            System.out.println(
+                "Error: " + e.getMessage()
+            );
+
+        } catch (java.util.InputMismatchException e) {
+
+            System.out.println(
+                "Error: debe ingresar un numero valido."
+            );
+
+            scanner.nextLine();
+        }
+    }
+
+    private void editarArriendo() {
+
+        try {
+
+            System.out.print("ID del cliente: ");
+            int idCliente = scanner.nextInt();
+
+            System.out.print("Numero del arriendo: ");
+            int numero = scanner.nextInt();
+
+            scanner.nextLine();
+
+            Arriendo arriendo =
+                videoClub.buscarArriendo(
+                    idCliente,
+                    numero
+                );
+
+            System.out.println(
+                "Arriendo actual:"
+            );
+
+            System.out.println(
+                formateador.formatear(arriendo)
+            );
+
+            System.out.print(
+                "Nueva fecha de arriendo (AAAA-MM-DD): "
+            );
+
+            String fecha = scanner.nextLine();
+
+            LocalDate nuevaFecha =
+                LocalDate.parse(fecha);
+
+            videoClub.editarArriendo(
+                idCliente,
+                numero,
+                nuevaFecha
+            );
+
+            System.out.println(
+                "Arriendo editado exitosamente."
+            );
+
+        } catch (ClienteNoEncontradoException |
+                IllegalArgumentException e) {
+
+            System.out.println(
+                "Error: " + e.getMessage()
+            );
+
+        } catch (java.time.format.DateTimeParseException e) {
+
+            System.out.println(
+                "Error: fecha invalida. Use AAAA-MM-DD."
+            );
+        }
+    }
+
+    private void eliminarArriendo() {
+
+        try {
+
+            System.out.print("ID del cliente: ");
+            int idCliente = scanner.nextInt();
+
+            System.out.print("Numero del arriendo: ");
+            int numero = scanner.nextInt();
+
+            scanner.nextLine();
+
+            Arriendo arriendo =
+                videoClub.buscarArriendo(
+                    idCliente,
+                    numero
+                );
+
+            System.out.println(
+                "Arriendo a eliminar:"
+            );
+
+            System.out.println(
+                formateador.formatear(arriendo)
+            );
+
+            videoClub.eliminarArriendo(
+                idCliente,
+                numero
+            );
+
+            System.out.println(
+                "Arriendo eliminado exitosamente."
+            );
+
+        } catch (ClienteNoEncontradoException |
+                IllegalArgumentException e) {
+
+            System.out.println(
+                "Error: " + e.getMessage()
+            );
+
+        } catch (java.util.InputMismatchException e) {
+
+            System.out.println(
+                "Error: debe ingresar un numero valido."
+            );
+
+            scanner.nextLine();
         }
     }
 
