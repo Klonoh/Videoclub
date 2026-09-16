@@ -156,7 +156,7 @@ public class VistaConsola {
          try{
             Cliente cliente = videoClub.buscarCliente(idCliente);
             System.out.println("Cliente encontrado:");
-            System.out.println(cliente);
+            System.out.println(formatear(cliente));
          } catch (ClienteNoEncontradoException e) {
             System.out.println("Error: Cliente no encontrado.");
          }
@@ -168,7 +168,7 @@ public class VistaConsola {
         try{
             Pelicula pelicula = videoClub.buscarPelicula(idPelicula);
             System.out.println("Película encontrada:");
-            System.out.println(pelicula);
+            System.out.println(formatear(pelicula));
         } catch (PeliculaNoDisponibleException e) {
             System.out.println("Error: Película no disponible.");
         }
@@ -222,7 +222,7 @@ public class VistaConsola {
         }
 
         for (Cliente cliente : clientes) {
-            System.out.println(cliente);
+            System.out.println(formatear(cliente));
         }
     }
 
@@ -238,7 +238,7 @@ public class VistaConsola {
         }
 
         for (Pelicula pelicula : peliculas) {
-            System.out.println(pelicula);
+            System.out.println(formatear(pelicula));
         }
     }
 }    
