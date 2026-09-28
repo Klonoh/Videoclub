@@ -1,29 +1,10 @@
-public class Recomendacion {
+public class Recomendacion extends InteraccionClientePelicula{
 
-    private Cliente cliente;
-    private Pelicula pelicula;
     private boolean exitosa;
 
     public Recomendacion(Cliente cliente, Pelicula pelicula) {
-        this.cliente = cliente;
-        this.pelicula = pelicula;
+        super(cliente, pelicula);
         this.exitosa = false;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public void setPelicula(Pelicula pelicula) {
-        this.pelicula = pelicula;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public Pelicula getPelicula() {
-        return pelicula;
     }
 
     public boolean isExitosa() {
@@ -32,5 +13,11 @@ public class Recomendacion {
 
     public void setExitosa(boolean exitosa) {
         this.exitosa = exitosa;
+    }
+
+    //en una recomendación la interacción se considera finalizada cuando fue exitosa
+    @Override
+    public boolean estaFinalizada() {
+        return exitosa;
     }
 }

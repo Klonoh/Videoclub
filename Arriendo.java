@@ -1,47 +1,27 @@
 import java.time.LocalDate;
 
-public class Arriendo {
+public class Arriendo extends InteraccionClientePelicula {
 
-    private Cliente cliente;
-    private Pelicula pelicula;
     private LocalDate fechaArriendo;
     private LocalDate fechaDevolucion;
     private boolean devuelto;
 
     public Arriendo(Cliente cliente, Pelicula pelicula) {
-        this.cliente = cliente;
-        this.pelicula = pelicula;
+        super(cliente, pelicula);
         this.fechaArriendo = LocalDate.now();
         this.fechaDevolucion = null;
         this.devuelto = false;
     }
 
     public Arriendo(Cliente cliente, Pelicula pelicula, LocalDate fechaArriendo) {
-        this.cliente = cliente;
-        this.pelicula = pelicula;
+        super(cliente, pelicula);
         this.fechaArriendo = fechaArriendo;
         this.fechaDevolucion = null;
         this.devuelto = false;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public void setPelicula(Pelicula pelicula) {
-        this.pelicula = pelicula;
-    }
-
     public void setFechaArriendo(LocalDate fechaArriendo) {
         this.fechaArriendo = fechaArriendo;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public Pelicula getPelicula() {
-        return pelicula;
     }
 
     public LocalDate getFechaArriendo() {
@@ -64,11 +44,17 @@ public class Arriendo {
         this.devuelto = devuelto;
     }
 
+    //en un arriendo la interacción se considera finalizada cuando la película fue devuelta
+    @Override
+    public boolean estaFinalizada() {
+        return devuelto;
+    }
+
     @Override
     public String toString() {
-        return "Cliente: " + cliente.getIdCliente() +
-            " | Pelicula: " + pelicula.getTitulo() +
-            " (" + pelicula.getIdPelicula() + ")" +
+        return "Cliente: " + getCliente().getIdCliente() +
+            " | Pelicula: " + getPelicula().getTitulo() +
+            " (" + getPelicula().getIdPelicula() + ")" +
             " | Fecha arriendo: " + fechaArriendo +
             " | Fecha devolucion: " +
             (fechaDevolucion == null ? "Pendiente" : fechaDevolucion) +

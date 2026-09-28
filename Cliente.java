@@ -62,6 +62,10 @@ public class Cliente{
         historial.add(arriendo);
     }
 
+    public boolean eliminarArriendo(Arriendo arriendo) {
+        return historial.remove(arriendo);
+    }
+
     @Override
     public String toString() {
         return "ID: " + idCliente +

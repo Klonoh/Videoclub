@@ -153,7 +153,7 @@ public class VideoClub{
 
                 if (recomendacion.getCliente().getIdCliente() == idCliente &&
                     recomendacion.getPelicula().getIdPelicula() == idPelicula &&
-                    !recomendacion.isExitosa()) {
+                    !recomendacion.estaFinalizada()) {
 
                     recomendacion.setExitosa(true);
                     break;
@@ -164,7 +164,7 @@ public class VideoClub{
 
     public void realizarDevolucion(int idCliente, int idPelicula) {
         for (Arriendo arriendo : arriendos) {
-            if (arriendo.getCliente().getIdCliente() == idCliente && arriendo.getPelicula().getIdPelicula() == idPelicula && !arriendo.isDevuelto()) {
+            if (arriendo.getCliente().getIdCliente() == idCliente && arriendo.getPelicula().getIdPelicula() == idPelicula && !arriendo.estaFinalizada()) {
                 arriendo.setDevuelto(true);
                 arriendo.setFechaDevolucion(LocalDate.now());
                 arriendo.getPelicula().setStockDisponible(arriendo.getPelicula().getStockDisponible() + 1);
@@ -282,7 +282,7 @@ public class VideoClub{
 
             if (arriendo.getCliente().getIdCliente() == idCliente &&
                 arriendo.getPelicula().getIdPelicula() == idPelicula &&
-                !arriendo.isDevuelto()) {
+                !arriendo.estaFinalizada()) {
 
                 return true;
             }
@@ -472,7 +472,7 @@ public class VideoClub{
 
         arriendos.remove(arriendo);
 
-        arriendo.getCliente().getHistorial().remove(arriendo);
+        arriendo.getCliente().eliminarArriendo(arriendo);
     }
 
 }
