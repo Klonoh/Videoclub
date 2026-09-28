@@ -51,11 +51,11 @@ public class Cliente{
     }
 
     public List<Arriendo> getHistorial() {
-        return historial;
+        return new ArrayList<>(historial);
     }
 
     public void setHistorial(List<Arriendo> historial) {
-        this.historial = historial;
+        this.historial = new ArrayList<>(historial);
     }
 
     public void agregarArriendo(Arriendo arriendo) {

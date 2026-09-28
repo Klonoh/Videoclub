@@ -18,27 +18,27 @@ public class VideoClub{
     }
 
     public Map<Integer, Cliente> getClientes() {
-        return clientes;
+        return new HashMap<>(clientes);
     }
 
     public void setClientes(Map<Integer, Cliente> clientes) {
-        this.clientes = clientes;
+        this.clientes = new HashMap<>(clientes);
     }
 
     public Map<Integer, Pelicula> getPeliculas() {
-        return peliculas;
+        return new HashMap<>(peliculas);
     }
 
     public void setPeliculas(Map<Integer, Pelicula> peliculas) {
-        this.peliculas = peliculas;
+        this.peliculas = new HashMap<>(peliculas);
     }
 
     public ArrayList<Arriendo> getArriendos() {
-        return arriendos;
+        return new ArrayList<>(arriendos);
     }
 
     public void setArriendos(ArrayList<Arriendo> arriendos) {
-        this.arriendos = arriendos;
+        this.arriendos = new ArrayList<>(arriendos);
     }
 
     public void agregarCliente(Cliente cliente) {
@@ -188,11 +188,11 @@ public class VideoClub{
     }
 
     public ArrayList<Recomendacion> getRecomendaciones() {
-        return recomendaciones;
+        return new ArrayList<>(recomendaciones);
     }
 
     public void setRecomendaciones(ArrayList<Recomendacion> recomendaciones) {
-        this.recomendaciones = recomendaciones;
+        this.recomendaciones = new ArrayList<>(recomendaciones);
     }
 
     public ArrayList<Cliente> listarClientes() {
@@ -204,7 +204,7 @@ public class VideoClub{
     }
 
     public ArrayList<Arriendo> listarArriendos() {
-        return arriendos;
+        return new ArrayList<>(arriendos);
     }
 
     // Calcula las preferencias del cliente contando cuántas veces ha arrendado películas de cada género.
