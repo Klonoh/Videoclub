@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class VistaGrafica{
     private VideoClub videoClub;
@@ -13,14 +15,43 @@ public class VistaGrafica{
     public void iniciar(){
         ventana  = new JFrame("Video Club");
         ventana.setSize(700,550);
-        ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        ventana.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        ventana.addWindowListener(
+            new java.awt.event.WindowAdapter() {
+
+                @Override
+                public void windowClosing(
+                        java.awt.event.WindowEvent e) {
+
+                    try {
+
+                        PersistenciaCSV persistencia =
+                            new PersistenciaCSV();
+
+                        persistencia.guardarDatos(
+                            videoClub
+                        );
+
+                        ventana.dispose();
+                        System.exit(0);
+
+                    } catch (IOException ex) {
+
+                        mostrarError(
+                            "No se pudieron guardar los datos: "
+                            + ex.getMessage()
+                        );
+                    }
+                }
+            }
+        );
         ventana.setLocationRelativeTo(null);
         JPanel panelPrincipal = new JPanel(new BorderLayout(10,10));
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         JLabel titulo = new JLabel("Bienvenido al Video Club", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 28));
         panelPrincipal.add(titulo, BorderLayout.NORTH);
-        JPanel panelBotones = new JPanel(new GridLayout(4,3,10,10));
+        JPanel panelBotones = new JPanel(new GridLayout(6,3,10,10));
 
         JButton btnAgregarCliente = new JButton("Agregar Cliente");
         JButton btnAgregarPelicula = new JButton("Agregar Película");
@@ -34,21 +65,35 @@ public class VistaGrafica{
         JButton btnListarClientes = new JButton("Listar Clientes");
         JButton btnListarPeliculas = new JButton("Listar Películas");
         JButton btnGuardar = new JButton("Guardar Datos");
+        JButton btnEditarCliente = new JButton("Editar Cliente");
+        JButton btnEditarPelicula = new JButton("Editar Pelicula");
+        JButton btnListarArriendos = new JButton("Listar Arriendos");
+        JButton btnBuscarArriendo = new JButton("Buscar Arriendo");
+        JButton btnEditarArriendo = new JButton("Editar Arriendo");
+        JButton btnEliminarArriendo = new JButton("Eliminar Arriendo");
         
         panelBotones.add(btnAgregarCliente);
-        panelBotones.add(btnAgregarPelicula);
         panelBotones.add(btnBuscarCliente);
+        panelBotones.add(btnEditarCliente);
+
+        panelBotones.add(btnEliminarCliente);
+        panelBotones.add(btnListarClientes);
+        panelBotones.add(btnAgregarPelicula);
 
         panelBotones.add(btnBuscarPelicula);
+        panelBotones.add(btnEditarPelicula);
+        panelBotones.add(btnEliminarPelicula);
+
+        panelBotones.add(btnListarPeliculas);
         panelBotones.add(btnArriendo);
         panelBotones.add(btnDevolucion);
 
-        panelBotones.add(btnEliminarCliente);
-        panelBotones.add(btnEliminarPelicula);
-        panelBotones.add(btnRecomendaciones);
+        panelBotones.add(btnListarArriendos);
+        panelBotones.add(btnBuscarArriendo);
+        panelBotones.add(btnEditarArriendo);
 
-        panelBotones.add(btnListarClientes);
-        panelBotones.add(btnListarPeliculas);
+        panelBotones.add(btnEliminarArriendo);
+        panelBotones.add(btnRecomendaciones);
         panelBotones.add(btnGuardar);
 
         panelPrincipal.add(panelBotones, BorderLayout.CENTER);
@@ -73,6 +118,12 @@ public class VistaGrafica{
         btnListarClientes.addActionListener(e -> listarClientes());
         btnListarPeliculas.addActionListener(e -> listarPeliculas());
         btnGuardar.addActionListener(e -> guardarDatos());
+        btnEditarCliente.addActionListener(e -> editarCliente());
+        btnEditarPelicula.addActionListener(e -> editarPelicula());
+        btnListarArriendos.addActionListener(e -> listarArriendos());
+        btnBuscarArriendo.addActionListener(e -> buscarArriendo());
+        btnEditarArriendo.addActionListener(e -> editarArriendo());
+        btnEliminarArriendo.addActionListener(e -> eliminarArriendo());
         ventana.add(panelPrincipal);
         ventana.setVisible(true);
     }
@@ -230,6 +281,66 @@ public class VistaGrafica{
         }
     }
 
+    private void editarCliente() {
+
+        try {
+
+            int id = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "ID del cliente a editar:"
+                )
+            );
+
+            Cliente cliente =
+                videoClub.buscarCliente(id);
+
+            String nombre =
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Nuevo nombre:",
+                    cliente.getNombre()
+                );
+
+            String apellido =
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Nuevo apellido:",
+                    cliente.getApellido()
+                );
+
+            String contacto =
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Nuevo contacto:",
+                    cliente.getContacto()
+                );
+
+            videoClub.editarCliente(
+                id,
+                nombre,
+                apellido,
+                contacto
+            );
+
+            mostrarMensaje(
+                "Cliente editado correctamente."
+            );
+
+        } catch (NumberFormatException e) {
+
+            mostrarError(
+                "El ID debe ser un numero."
+            );
+
+        } catch (ClienteNoEncontradoException e) {
+
+            mostrarError(
+                "Cliente no encontrado."
+            );
+        }
+    }
+
     private void eliminarCliente() {
 
         try {
@@ -256,6 +367,76 @@ public class VistaGrafica{
 
         } catch (ClienteNoEncontradoException e) {
             mostrarError("Cliente no encontrado.");
+        }
+    }
+
+    private void editarPelicula() {
+
+        try {
+
+            int id = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "ID de la pelicula a editar:"
+                )
+            );
+
+            Pelicula pelicula =
+                videoClub.buscarPelicula(id);
+
+            String titulo =
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Nuevo titulo:",
+                    pelicula.getTitulo()
+                );
+
+            String director =
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Nuevo director:",
+                    pelicula.getDirector()
+                );
+
+            String genero =
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Nuevo genero:",
+                    pelicula.getGenero()
+                );
+
+            int fechaEstreno =
+                Integer.parseInt(
+                    JOptionPane.showInputDialog(
+                        ventana,
+                        "Nuevo año de estreno:",
+                        pelicula.getFechaEstreno()
+                    )
+                );
+
+            videoClub.editarPelicula(
+                id,
+                titulo,
+                director,
+                genero,
+                fechaEstreno
+            );
+
+            mostrarMensaje(
+                "Pelicula editada correctamente."
+            );
+
+        } catch (NumberFormatException e) {
+
+            mostrarError(
+                "Los valores numericos no son validos."
+            );
+
+        } catch (PeliculaNoDisponibleException e) {
+
+            mostrarError(
+                "Pelicula no encontrada."
+            );
         }
     }
 
@@ -428,5 +609,238 @@ public class VistaGrafica{
                 "Error",
                 JOptionPane.ERROR_MESSAGE
         );
+    }
+
+    private void listarArriendos() {
+
+            try {
+
+                int idCliente = Integer.parseInt(
+                    JOptionPane.showInputDialog(
+                        ventana,
+                        "ID del cliente:"
+                    )
+                );
+
+                ArrayList<Arriendo> historial =
+                    videoClub.listarArriendosCliente(
+                        idCliente
+                    );
+
+                StringBuilder texto =
+                    new StringBuilder();
+
+                texto.append("HISTORIAL DE ARRIENDOS\n");
+                texto.append("======================\n\n");
+
+                if (historial.isEmpty()) {
+
+                    texto.append(
+                        "El cliente no posee arriendos."
+                    );
+
+                } else {
+
+                    for (int i = 0;
+                        i < historial.size();
+                        i++) {
+
+                        texto.append(i + 1)
+                            .append(". ")
+                            .append(
+                                historial.get(i).toString()
+                            )
+                            .append("\n");
+                    }
+                }
+
+                areaResultados.setText(
+                    texto.toString()
+                );
+
+            } catch (NumberFormatException e) {
+
+                mostrarError(
+                    "El ID debe ser un numero."
+                );
+
+            } catch (ClienteNoEncontradoException e) {
+
+                mostrarError(
+                    "Cliente no encontrado."
+                );
+            }
+        }
+
+        private void buscarArriendo() {
+
+        try {
+
+            int idCliente = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "ID del cliente:"
+                )
+            );
+
+            int numero = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Numero del arriendo:"
+                )
+            );
+
+            Arriendo arriendo =
+                videoClub.buscarArriendo(
+                    idCliente,
+                    numero
+                );
+
+            areaResultados.setText(
+                "ARRIENDO ENCONTRADO\n\n"
+                + arriendo.toString()
+            );
+
+        } catch (NumberFormatException e) {
+
+            mostrarError(
+                "Los valores deben ser numericos."
+            );
+
+        } catch (ClienteNoEncontradoException |
+                IllegalArgumentException e) {
+
+            mostrarError(
+                e.getMessage()
+            );
+        }
+    }
+
+    private void editarArriendo() {
+
+        try {
+
+            int idCliente = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "ID del cliente:"
+                )
+            );
+
+            int numero = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Numero del arriendo:"
+                )
+            );
+
+            Arriendo arriendo =
+                videoClub.buscarArriendo(
+                    idCliente,
+                    numero
+                );
+
+            String fecha =
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Nueva fecha (AAAA-MM-DD):",
+                    arriendo.getFechaArriendo()
+                );
+
+            LocalDate nuevaFecha =
+                LocalDate.parse(fecha);
+
+            videoClub.editarArriendo(
+                idCliente,
+                numero,
+                nuevaFecha
+            );
+
+            mostrarMensaje(
+                "Arriendo editado correctamente."
+            );
+
+        } catch (NumberFormatException e) {
+
+            mostrarError(
+                "Los valores deben ser numericos."
+            );
+
+        } catch (DateTimeParseException e) {
+
+            mostrarError(
+                "Fecha invalida. Use AAAA-MM-DD."
+            );
+
+        } catch (ClienteNoEncontradoException |
+                IllegalArgumentException e) {
+
+            mostrarError(
+                e.getMessage()
+            );
+        }
+    }
+
+    private void eliminarArriendo() {
+
+        try {
+
+            int idCliente = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "ID del cliente:"
+                )
+            );
+
+            int numero = Integer.parseInt(
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Numero del arriendo:"
+                )
+            );
+
+            Arriendo arriendo =
+                videoClub.buscarArriendo(
+                    idCliente,
+                    numero
+                );
+
+            int respuesta =
+                JOptionPane.showConfirmDialog(
+                    ventana,
+                    "¿Eliminar este arriendo?\n\n"
+                    + arriendo.toString(),
+                    "Confirmar eliminacion",
+                    JOptionPane.YES_NO_OPTION
+                );
+
+            if (respuesta !=
+                    JOptionPane.YES_OPTION) {
+
+                return;
+            }
+
+            videoClub.eliminarArriendo(
+                idCliente,
+                numero
+            );
+
+            mostrarMensaje(
+                "Arriendo eliminado correctamente."
+            );
+
+        } catch (NumberFormatException e) {
+
+            mostrarError(
+                "Los valores deben ser numericos."
+            );
+
+        } catch (ClienteNoEncontradoException |
+                IllegalArgumentException e) {
+
+            mostrarError(
+                e.getMessage()
+            );
+        }
     }
 }

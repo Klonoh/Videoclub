@@ -1,0 +1,176 @@
+@startuml
+
+title UML - VideoClub
+
+' =========================
+' ESTILO BLANCO Y NEGRO
+' =========================
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam classAttributeIconSize 0
+
+skinparam ArrowColor black
+skinparam ArrowFontColor black
+
+skinparam class {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+    AttributeFontColor black
+    MethodFontColor black
+}
+
+skinparam title {
+    FontColor black
+    FontSize 24
+}
+
+skinparam legend {
+    BackgroundColor white
+    BorderColor black
+    FontColor black
+}
+
+' =========================
+' VIDEOCLUB
+' =========================
+
+class VideoClub {
+
+    - clientes : Map<Integer, Cliente>
+    - peliculas : Map<Integer, Pelicula>
+    - arriendos : ArrayList<Arriendo>
+    - recomendaciones : ArrayList<Recomendacion>
+
+    --
+
+    + agregarCliente(Cliente) : void
+    + buscarCliente(int) : Cliente
+    + listarClientes() : ArrayList<Cliente>
+    + editarCliente(int, String, String, String) : void
+    + eliminarCliente(int) : boolean
+
+    --
+
+    + registrarPelicula(Pelicula) : void
+    + buscarPelicula(int) : Pelicula
+    + buscarPelicula(String) : List<Pelicula>
+    + listarPeliculas() : ArrayList<Pelicula>
+    + editarPelicula(int, String, String, String, int) : void
+    + eliminarPelicula(int) : boolean
+
+    --
+
+    + realizarArriendo(int, int) : void
+    + realizarDevolucion(int, int) : void
+    + listarArriendosCliente(int) : ArrayList<Arriendo>
+    + buscarArriendo(int, int) : Arriendo
+    + editarArriendo(int, int, LocalDate) : void
+    + eliminarArriendo(int, int) : void
+
+    --
+
+    + generarRecomendaciones(int, int) : ArrayList<Pelicula>
+}
+
+' =========================
+' CLIENTE
+' =========================
+
+class Cliente {
+
+    - idCliente : int
+    - nombre : String
+    - apellido : String
+    - contacto : String
+    - historial : List<Arriendo>
+
+    --
+
+    + Cliente(int, String, String, String)
+    + agregarArriendo(Arriendo) : void
+    + toString() : String
+}
+
+' =========================
+' PELICULA
+' =========================
+
+class Pelicula {
+
+    - idPelicula : int
+    - titulo : String
+    - director : String
+    - genero : String
+    - fechaEstreno : int
+    - stockTotal : int
+    - stockDisponible : int
+
+    --
+
+    + Pelicula(int, String, String, String, int, int)
+    + hayStock() : boolean
+    + disminuirStock() : void
+    + toString() : String
+}
+
+' =========================
+' ARRIENDO
+' =========================
+
+class Arriendo {
+
+    - cliente : Cliente
+    - pelicula : Pelicula
+    - fechaArriendo : LocalDate
+    - fechaDevolucion : LocalDate
+    - devuelto : boolean
+
+    --
+
+    + Arriendo(Cliente, Pelicula)
+    + Arriendo(Cliente, Pelicula, LocalDate)
+    + toString() : String
+}
+
+' =========================
+' RECOMENDACION
+' =========================
+
+class Recomendacion {
+
+    - cliente : Cliente
+    - pelicula : Pelicula
+    - exitosa : boolean
+
+    --
+
+    + Recomendacion(Cliente, Pelicula)
+    + isExitosa() : boolean
+    + setExitosa(boolean) : void
+}
+
+' =========================
+' RELACIONES
+' =========================
+
+VideoClub "1" o-- "0..*" Cliente : clientes
+VideoClub "1" o-- "0..*" Pelicula : peliculas
+VideoClub "1" o-- "0..*" Arriendo : arriendos
+VideoClub "1" o-- "0..*" Recomendacion : recomendaciones
+
+Cliente "1" o-- "0..*" Arriendo : historial
+
+Arriendo "0..*" --> "1" Pelicula : pelicula
+
+Recomendacion "0..*" --> "1" Cliente : cliente
+Recomendacion "0..*" --> "1" Pelicula : pelicula
+
+legend bottom
+Getters y setters omitidos por legibilidad.
+Todos se encuentran implementados en el codigo.
+endlegend
+
+@enduml

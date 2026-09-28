@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Scanner;
 
 public class Main {
 
@@ -18,20 +19,42 @@ public class Main {
             );
         }
 
-        VistaGrafica vista = new VistaGrafica(videoClub);
+        Scanner scanner = new Scanner(System.in);
 
-        vista.iniciar();
+        System.out.println("=== Video Club ===");
+        System.out.println("1. Usar Consola");
+        System.out.println("2. Usar Ventanas");
+        System.out.print("Seleccione modo: ");
 
-        try {
+        int modo = scanner.nextInt();
 
-            persistencia.guardarDatos(videoClub);
+        if (modo == 1) {
 
-        } catch (IOException e) {
+            VistaConsola vista = new VistaConsola(videoClub);
+            vista.iniciar();
 
-            System.out.println(
-                "Error al guardar los datos: " + e.getMessage()
-            );
+            try {
+
+                persistencia.guardarDatos(videoClub);
+
+            } catch (IOException e) {
+
+                System.out.println(
+                    "Error al guardar los datos: "
+                    + e.getMessage()
+                );
+            }
+
+        } else if (modo == 2) {
+
+            VistaGrafica vista =
+                new VistaGrafica(videoClub);
+
+            vista.iniciar();
+
+        } else {
+
+            System.out.println("Opcion invalida.");
         }
     }
 }
-

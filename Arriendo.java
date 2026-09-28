@@ -63,4 +63,16 @@ public class Arriendo {
     public void setDevuelto(boolean devuelto) {
         this.devuelto = devuelto;
     }
+
+    @Override
+    public String toString() {
+        return "Cliente: " + cliente.getIdCliente() +
+            " | Pelicula: " + pelicula.getTitulo() +
+            " (" + pelicula.getIdPelicula() + ")" +
+            " | Fecha arriendo: " + fechaArriendo +
+            " | Fecha devolucion: " +
+            (fechaDevolucion == null ? "Pendiente" : fechaDevolucion) +
+            " | Estado: " +
+            (devuelto ? "Devuelto" : "Activo");
+    }
 }
