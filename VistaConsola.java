@@ -244,18 +244,48 @@ public class VistaConsola {
             System.out.println("Error: Cliente no encontrado.");
          }
     }
-    private void buscarPelicula(){
-        System.out.print("ID de la película: ");
-        int idPelicula = scanner.nextInt();
+    private void buscarPelicula() {
+
+        System.out.println("1. Buscar por ID");
+        System.out.println("2. Buscar por titulo o genero");
+        System.out.print("Seleccione una opcion: ");
+
+        int opcion = scanner.nextInt();
         scanner.nextLine();
-        try{
-            Pelicula pelicula = videoClub.buscarPelicula(idPelicula);
-            System.out.println("Película encontrada:");
-            System.out.println(formateador.formatear(pelicula));
-        } catch (PeliculaNoDisponibleException e) {
-            System.out.println("Error: Película no disponible.");
+
+        if (opcion == 1) {
+            System.out.print("ID de la pelicula: ");
+            int idPelicula = scanner.nextInt();
+            scanner.nextLine();
+            try {
+                Pelicula pelicula = videoClub.buscarPelicula(idPelicula);
+                System.out.println("Película encontrada:");
+                System.out.println(formateador.formatear(pelicula));
+            } catch (PeliculaNoDisponibleException e) {
+                System.out.println("Error: Película no disponible.");
+            }
+        } else if (opcion == 2) {
+            System.out.print("Titulo o genero: ");
+            String criterio = scanner.nextLine();
+
+            java.util.List<Pelicula> resultados = videoClub.buscarPelicula(criterio);
+
+            if (resultados.isEmpty()) {
+                System.out.println("No se encontraron peliculas.");
+                return;
+            }
+
+            System.out.println("Peliculas encontradas:");
+
+            for (Pelicula pelicula : resultados) {
+                System.out.println(formateador.formatear(pelicula));
+            }
+
+        } else {
+            System.out.println("Opcion invalida.");
         }
     }
+
     private void eliminarCliente() {
         System.out.print("ID del cliente a eliminar: ");
         int idCliente = scanner.nextInt();

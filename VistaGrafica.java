@@ -208,30 +208,85 @@ public class VistaGrafica{
             mostrarError("Cliente no encontrado.");
         }
     }
-     private void buscarPelicula() {
+    private void buscarPelicula() {
+        String[] opciones = {"ID", "Titulo o genero"};
 
-        try {
-            int id = Integer.parseInt(
-                    JOptionPane.showInputDialog(ventana, "ID de la película:")
-            );
+        int opcion = JOptionPane.showOptionDialog(
+            ventana,
+            "Como desea buscar la pelicula?",
+            "Buscar pelicula",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0]
+        );
 
-            Pelicula pelicula = videoClub.buscarPelicula(id);
+        if (opcion == 0) {
+            try {
+                String entrada = JOptionPane.showInputDialog(
+                    ventana,
+                    "ID de la pelicula:"
+                );
 
-            areaResultados.setText(
-                    "PELÍCULA ENCONTRADA\n\n" +
+                if (entrada == null) {
+                    return;
+                }
+
+                int id = Integer.parseInt(entrada);
+                Pelicula pelicula = videoClub.buscarPelicula(id);
+
+                areaResultados.setText(
+                    "PELICULA ENCONTRADA\n\n" +
                     "ID: " + pelicula.getIdPelicula() + "\n" +
-                    "Título: " + pelicula.getTitulo() + "\n" +
+                    "Titulo: " + pelicula.getTitulo() + "\n" +
                     "Director: " + pelicula.getDirector() + "\n" +
-                    "Género: " + pelicula.getGenero() + "\n" +
+                    "Genero: " + pelicula.getGenero() + "\n" +
                     "Año: " + pelicula.getFechaEstreno() + "\n" +
                     "Stock disponible: " + pelicula.getStockDisponible()
+                );
+
+            } catch (NumberFormatException e) {
+                mostrarError("El ID debe ser un numero.");
+            } catch (PeliculaNoDisponibleException e) {
+                mostrarError("Pelicula no encontrada.");
+            }
+
+        } else if (opcion == 1) {
+            String criterio = JOptionPane.showInputDialog(
+                ventana,
+                "Ingrese titulo o genero:"
             );
 
-        } catch (NumberFormatException e) {
-            mostrarError("El ID debe ser un número.");
+            if (criterio == null) {
+                return;
+            }
 
-        } catch (PeliculaNoDisponibleException e) {
-            mostrarError("Película no encontrada.");
+            java.util.List<Pelicula> resultados =
+                videoClub.buscarPelicula(criterio);
+
+            if (resultados.isEmpty()) {
+                areaResultados.setText(
+                    "No se encontraron peliculas."
+                );
+                return;
+            }
+
+            StringBuilder texto = new StringBuilder(
+                "PELICULAS ENCONTRADAS\n\n"
+            );
+
+            for (Pelicula pelicula : resultados) {
+                texto.append("ID: ")
+                    .append(pelicula.getIdPelicula())
+                    .append("\nTitulo: ")
+                    .append(pelicula.getTitulo())
+                    .append("\nGenero: ")
+                    .append(pelicula.getGenero())
+                    .append("\n\n");
+            }
+
+            areaResultados.setText(texto.toString());
         }
     }
 
