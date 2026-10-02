@@ -7,13 +7,13 @@ import java.time.LocalDate;
 public class VideoClub{
     private Map<Integer, Cliente> clientes;
     private Map<Integer, Pelicula> peliculas;
-    private ArrayList<Arriendo> arriendos;
+    private GestorArriendos gestorArriendos;
     private ArrayList<Recomendacion> recomendaciones;
 
     public VideoClub() {
         clientes = new HashMap<>();
         peliculas = new HashMap<>();
-        arriendos = new ArrayList<>();
+        gestorArriendos = new GestorArriendos();
         recomendaciones = new ArrayList<>();
     }
 
@@ -33,12 +33,20 @@ public class VideoClub{
         this.peliculas = new HashMap<>(peliculas);
     }
 
+    public GestorArriendos getGestorArriendos() {
+        return gestorArriendos;
+    }
+
+    public void setGestorArriendos(GestorArriendos gestorArriendos) {
+        this.gestorArriendos = gestorArriendos;
+    }
+
     public ArrayList<Arriendo> getArriendos() {
-        return new ArrayList<>(arriendos);
+        return gestorArriendos.getArriendos();
     }
 
     public void setArriendos(ArrayList<Arriendo> arriendos) {
-        this.arriendos = new ArrayList<>(arriendos);
+        gestorArriendos.setArriendos(arriendos);
     }
 
     public void agregarCliente(Cliente cliente) {
@@ -82,7 +90,7 @@ public class VideoClub{
 
         buscarCliente(idCliente);
 
-        for (Arriendo arriendo : arriendos) {
+        for (Arriendo arriendo : gestorArriendos.getArriendos()) {
 
             if (arriendo.getCliente().getIdCliente() == idCliente) {
                 return false;
@@ -104,7 +112,7 @@ public class VideoClub{
 
         buscarPelicula(idPelicula);
 
-        for (Arriendo arriendo : arriendos) {
+        for (Arriendo arriendo : gestorArriendos.getArriendos()) {
 
             if (arriendo.getPelicula().getIdPelicula() == idPelicula) {
                 return false;
@@ -123,10 +131,7 @@ public class VideoClub{
     }
 
     public void agregarArriendo(Arriendo arriendo) {
-
-        arriendos.add(arriendo);
-
-        arriendo.getCliente().agregarArriendo(arriendo);
+        gestorArriendos.agregarArriendo(arriendo);
     }
 
     public void agregarRecomendacion(Recomendacion recomendacion) {
@@ -134,43 +139,26 @@ public class VideoClub{
     }
 
     public void realizarArriendo(int idCliente, int idPelicula) throws PeliculaNoDisponibleException, ClienteNoEncontradoException {
-
         Cliente cliente = buscarCliente(idCliente);
         Pelicula pelicula = buscarPelicula(idPelicula);
 
-        if (!pelicula.hayStock()) {
-            throw new PeliculaNoDisponibleException("La pelicula no tiene stock disponible");
-        }
+        gestorArriendos.realizarArriendo(cliente, pelicula);
 
-        if (cliente != null && pelicula != null && pelicula.hayStock()) {
+        for (Recomendacion recomendacion : recomendaciones) {
 
-            Arriendo arriendo = new Arriendo(cliente, pelicula);
+            if (recomendacion.getCliente().getIdCliente() == idCliente &&
+                recomendacion.getPelicula().getIdPelicula() == idPelicula &&
+                !recomendacion.estaFinalizada()) {
 
-            agregarArriendo(arriendo);
-            pelicula.disminuirStock();
-
-            for (Recomendacion recomendacion : recomendaciones) {
-
-                if (recomendacion.getCliente().getIdCliente() == idCliente &&
-                    recomendacion.getPelicula().getIdPelicula() == idPelicula &&
-                    !recomendacion.estaFinalizada()) {
-
-                    recomendacion.setExitosa(true);
-                    break;
-                }
-            }
-        }
-    }
-
-    public void realizarDevolucion(int idCliente, int idPelicula) {
-        for (Arriendo arriendo : arriendos) {
-            if (arriendo.getCliente().getIdCliente() == idCliente && arriendo.getPelicula().getIdPelicula() == idPelicula && !arriendo.estaFinalizada()) {
-                arriendo.setDevuelto(true);
-                arriendo.setFechaDevolucion(LocalDate.now());
-                arriendo.getPelicula().setStockDisponible(arriendo.getPelicula().getStockDisponible() + 1);
+                recomendacion.setExitosa(true);
                 break;
             }
         }
+
+    }
+
+    public void realizarDevolucion(int idCliente, int idPelicula) {
+        gestorArriendos.realizarDevolucion(idCliente, idPelicula);
     }
 
     public ArrayList<Arriendo> obtenerHistorialCliente(int idCliente) {
@@ -203,9 +191,7 @@ public class VideoClub{
         return new ArrayList<>(peliculas.values());
     }
 
-    public ArrayList<Arriendo> listarArriendos() {
-        return new ArrayList<>(arriendos);
-    }
+    public ArrayList<Arriendo> listarArriendos() {return gestorArriendos.listarArriendos();}
 
     // Calcula las preferencias del cliente contando cuántas veces ha arrendado películas de cada género.
     public Map<String, Integer> obtenerPreferenciasGenero(int idCliente) {
@@ -250,7 +236,7 @@ public class VideoClub{
 
         int cantidad = 0;
 
-        for (Arriendo arriendo : arriendos) {
+        for (Arriendo arriendo : gestorArriendos.getArriendos()) {
 
             if (arriendo.getPelicula().getIdPelicula() == idPelicula) {
                 cantidad++;
@@ -278,7 +264,7 @@ public class VideoClub{
 
     private boolean tienePeliculaArrendada(int idCliente, int idPelicula) {
 
-        for (Arriendo arriendo : arriendos) {
+        for (Arriendo arriendo : gestorArriendos.getArriendos()) {
 
             if (arriendo.getCliente().getIdCliente() == idCliente &&
                 arriendo.getPelicula().getIdPelicula() == idPelicula &&
@@ -440,40 +426,17 @@ public class VideoClub{
     public Arriendo buscarArriendo(int idCliente, int numero) throws ClienteNoEncontradoException {
 
         Cliente cliente = buscarCliente(idCliente);
-
-        List<Arriendo> historial = cliente.getHistorial();
-
-        if (numero < 1 || numero > historial.size()) {
-            throw new IllegalArgumentException(
-                "No existe un arriendo con ese numero."
-            );
-        }
-
-        return historial.get(numero - 1);
+        return gestorArriendos.buscarArriendo(cliente, numero);
     }
 
     public void editarArriendo(int idCliente, int numero, LocalDate nuevaFecha) throws ClienteNoEncontradoException {
-
-        Arriendo arriendo = buscarArriendo(idCliente, numero);
-
-        arriendo.setFechaArriendo(nuevaFecha);
+        Cliente cliente = buscarCliente(idCliente);
+        gestorArriendos.editarArriendo(cliente, numero, nuevaFecha);
     }
 
     public void eliminarArriendo(int idCliente, int numero) throws ClienteNoEncontradoException {
-
-        Arriendo arriendo = buscarArriendo(idCliente, numero);
-
-        if (!arriendo.isDevuelto()) {
-
-            Pelicula pelicula = arriendo.getPelicula();
-
-            pelicula.setStockDisponible(pelicula.getStockDisponible() + 1);
-        }
-
-        arriendos.remove(arriendo);
-
-        arriendo.getCliente().eliminarArriendo(arriendo);
+        Cliente cliente = buscarCliente(idCliente);
+        gestorArriendos.eliminarArriendo(cliente, numero);
     }
-
 }
 
