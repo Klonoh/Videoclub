@@ -96,4 +96,28 @@ public class GestorArriendos {
         arriendos.remove(arriendo);
         cliente.eliminarArriendo(arriendo);
     }
+
+    public int obtenerCantidadArriendos(int idPelicula) {
+        int cantidad = 0;
+
+        for (Arriendo arriendo : arriendos) {
+            if (arriendo.getPelicula().getIdPelicula() == idPelicula) {
+                cantidad++;
+            }
+        }
+
+        return cantidad;
+    }
+
+    public boolean tienePeliculaArrendada(int idCliente, int idPelicula) {
+        for (Arriendo arriendo : arriendos) {
+            if (arriendo.getCliente().getIdCliente() == idCliente
+                    && arriendo.getPelicula().getIdPelicula() == idPelicula
+                    && !arriendo.estaFinalizada()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
