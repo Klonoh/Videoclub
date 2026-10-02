@@ -364,6 +364,9 @@ public class VistaGrafica{
 
         } catch (NumberFormatException e) {
             mostrarError("Los IDs deben ser números.");
+
+        } catch (PeliculaNoDisponibleException e) {
+            mostrarError(e.getMessage());
         }
     }
 

@@ -186,8 +186,12 @@ public class VistaConsola {
         System.out.print("ID de la película: ");
         int idPelicula = scanner.nextInt();
         scanner.nextLine();
-        videoClub.realizarDevolucion(idCliente, idPelicula);
-        System.out.println("Devolución realizada exitosamente.");
+        try {
+            videoClub.realizarDevolucion(idCliente, idPelicula);
+            System.out.println("Devolución realizada exitosamente.");
+        } catch (PeliculaNoDisponibleException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void generarRecomendaciones() {

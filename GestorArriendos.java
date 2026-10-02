@@ -52,9 +52,14 @@ public class GestorArriendos {
                         pelicula.getStockDisponible() + 1
                 );
 
-                break;
+                return;
             }
         }
+
+        throw new PeliculaNoDisponibleException(
+                "No existe un arriendo activo para el cliente " + idCliente
+                        + " y la pelicula " + idPelicula + "."
+        );
     }
 
     public ArrayList<Arriendo> listarArriendos() {
