@@ -129,10 +129,25 @@ public class VistaGrafica{
     }
     private void agregarCliente() {
         try{
-            int id = Integer.parseInt(JOptionPane.showInputDialog(ventana, "Ingrese el ID del cliente:"));
+            Integer id = pedirEntero("Ingrese el ID del cliente:");
+            if (id == null) {
+                return;
+            }
+
             String nombre = JOptionPane.showInputDialog(ventana, "Nombre del cliente: ");
+            if (nombre == null) {
+                return;
+            }
+
             String apellido = JOptionPane.showInputDialog(ventana, "Apellido del cliente: ");
+            if (apellido == null) {
+                return;
+            }
+
             String contacto = JOptionPane.showInputDialog(ventana, "Contacto del cliente: ");
+            if (contacto == null) {
+                return;
+            }
             Cliente cliente = new Cliente(id, nombre, apellido, contacto);
             videoClub.agregarCliente(cliente);
             mostrarMensaje("Cliente agregado exitosamente.");
@@ -143,29 +158,41 @@ public class VistaGrafica{
     private void agregarPelicula() {
 
         try {
-            int id = Integer.parseInt(
-                    JOptionPane.showInputDialog(ventana, "ID de la película:")
-            );
+            Integer id = pedirEntero("ID de la película:");
+            if (id == null) {
+                return;
+            }
 
             String titulo = JOptionPane.showInputDialog(
                     ventana, "Título de la película:"
             );
+            if (titulo == null) {
+                return;
+            }
 
             String director = JOptionPane.showInputDialog(
                     ventana, "Director:"
             );
+            if (director == null) {
+                return;
+            }
 
             String genero = JOptionPane.showInputDialog(
                     ventana, "Género:"
             );
+            if (genero == null) {
+                return;
+            }
 
-            int fechaEstreno = Integer.parseInt(
-                    JOptionPane.showInputDialog(ventana, "Año de estreno:")
-            );
+            Integer fechaEstreno = pedirEntero("Año de estreno:");
+            if (fechaEstreno == null) {
+                return;
+            }
 
-            int stockTotal = Integer.parseInt(
-                    JOptionPane.showInputDialog(ventana, "Stock total:")
-            );
+            Integer stockTotal = pedirEntero("Stock total:");
+            if (stockTotal == null) {
+                return;
+            }
 
             Pelicula pelicula = new Pelicula(
                     id,
@@ -186,10 +213,13 @@ public class VistaGrafica{
     }
     private void buscarCliente() {
 
+        Integer id = pedirEntero("ID del cliente:");
+
+        if (id == null) {
+            return;
+        }
+
         try {
-            int id = Integer.parseInt(
-                    JOptionPane.showInputDialog(ventana, "ID del cliente:")
-            );
 
             Cliente cliente = videoClub.buscarCliente(id);
 
@@ -200,9 +230,6 @@ public class VistaGrafica{
                     "Apellido: " + cliente.getApellido() + "\n" +
                     "Contacto: " + cliente.getContacto()
             );
-
-        } catch (NumberFormatException e) {
-            mostrarError("El ID debe ser un número.");
 
         } catch (ClienteNoEncontradoException e) {
             mostrarError("Cliente no encontrado.");
@@ -293,13 +320,15 @@ public class VistaGrafica{
     private void realizarArriendo() {
 
         try {
-            int idCliente = Integer.parseInt(
-                    JOptionPane.showInputDialog(ventana, "ID del cliente:")
-            );
+            Integer idCliente = pedirEntero("ID del cliente:");
+            if (idCliente == null) {
+                return;
+            }
 
-            int idPelicula = Integer.parseInt(
-                    JOptionPane.showInputDialog(ventana, "ID de la película:")
-            );
+            Integer idPelicula = pedirEntero("ID de la película:");
+            if (idPelicula == null) {
+                return;
+            }
 
             videoClub.realizarArriendo(idCliente, idPelicula);
 
@@ -319,13 +348,15 @@ public class VistaGrafica{
     private void realizarDevolucion() {
 
         try {
-            int idCliente = Integer.parseInt(
-                    JOptionPane.showInputDialog(ventana, "ID del cliente:")
-            );
+            Integer idCliente = pedirEntero("ID del cliente:");
+            if (idCliente == null) {
+                return;
+            }
 
-            int idPelicula = Integer.parseInt(
-                    JOptionPane.showInputDialog(ventana, "ID de la película:")
-            );
+            Integer idPelicula = pedirEntero("ID de la película:");
+            if (idPelicula == null) {
+                return;
+            }
 
             videoClub.realizarDevolucion(idCliente, idPelicula);
 
@@ -340,12 +371,10 @@ public class VistaGrafica{
 
         try {
 
-            int id = Integer.parseInt(
-                JOptionPane.showInputDialog(
-                    ventana,
-                    "ID del cliente a editar:"
-                )
-            );
+            Integer id = pedirEntero("ID del cliente a editar:");
+            if (id == null) {
+                return;
+            }
 
             Cliente cliente =
                 videoClub.buscarCliente(id);
@@ -356,6 +385,9 @@ public class VistaGrafica{
                     "Nuevo nombre:",
                     cliente.getNombre()
                 );
+            if (nombre == null) {
+                return;
+            }
 
             String apellido =
                 JOptionPane.showInputDialog(
@@ -363,6 +395,9 @@ public class VistaGrafica{
                     "Nuevo apellido:",
                     cliente.getApellido()
                 );
+            if (apellido == null) {
+                return;
+            }
 
             String contacto =
                 JOptionPane.showInputDialog(
@@ -370,6 +405,9 @@ public class VistaGrafica{
                     "Nuevo contacto:",
                     cliente.getContacto()
                 );
+            if (contacto == null) {
+                return;
+            }
 
             videoClub.editarCliente(
                 id,
@@ -399,12 +437,10 @@ public class VistaGrafica{
     private void eliminarCliente() {
 
         try {
-            int id = Integer.parseInt(
-                    JOptionPane.showInputDialog(
-                            ventana,
-                            "ID del cliente a eliminar:"
-                    )
-            );
+            Integer id = pedirEntero("ID del cliente a eliminar:");
+            if (id == null) {
+                return;
+            }
 
             boolean eliminado = videoClub.eliminarCliente(id);
 
@@ -429,12 +465,10 @@ public class VistaGrafica{
 
         try {
 
-            int id = Integer.parseInt(
-                JOptionPane.showInputDialog(
-                    ventana,
-                    "ID de la pelicula a editar:"
-                )
-            );
+            Integer id = pedirEntero("ID de la pelicula a editar:");
+            if (id == null) {
+                return;
+            }
 
             Pelicula pelicula =
                 videoClub.buscarPelicula(id);
@@ -445,6 +479,9 @@ public class VistaGrafica{
                     "Nuevo titulo:",
                     pelicula.getTitulo()
                 );
+            if (titulo == null) {
+                return;
+            }
 
             String director =
                 JOptionPane.showInputDialog(
@@ -452,6 +489,9 @@ public class VistaGrafica{
                     "Nuevo director:",
                     pelicula.getDirector()
                 );
+            if (director == null) {
+                return;
+            }
 
             String genero =
                 JOptionPane.showInputDialog(
@@ -459,15 +499,23 @@ public class VistaGrafica{
                     "Nuevo genero:",
                     pelicula.getGenero()
                 );
+            if (genero == null) {
+                return;
+            }
+
+            String entradaFechaEstreno =
+                JOptionPane.showInputDialog(
+                    ventana,
+                    "Nuevo año de estreno:",
+                    pelicula.getFechaEstreno()
+                );
+
+            if (entradaFechaEstreno == null) {
+                return;
+            }
 
             int fechaEstreno =
-                Integer.parseInt(
-                    JOptionPane.showInputDialog(
-                        ventana,
-                        "Nuevo año de estreno:",
-                        pelicula.getFechaEstreno()
-                    )
-                );
+                Integer.parseInt(entradaFechaEstreno);
 
             videoClub.editarPelicula(
                 id,
@@ -498,12 +546,10 @@ public class VistaGrafica{
     private void eliminarPelicula() {
 
         try {
-            int id = Integer.parseInt(
-                    JOptionPane.showInputDialog(
-                            ventana,
-                            "ID de la película a eliminar:"
-                    )
-            );
+            Integer id = pedirEntero("ID de la película a eliminar:");
+            if (id == null) {
+                return;
+            }
 
             boolean eliminada = videoClub.eliminarPelicula(id);
 
@@ -585,19 +631,15 @@ public class VistaGrafica{
     private void generarRecomendaciones() {
 
         try {
-            int idCliente = Integer.parseInt(
-                    JOptionPane.showInputDialog(
-                            ventana,
-                            "ID del cliente:"
-                    )
-            );
+            Integer idCliente = pedirEntero("ID del cliente:");
+            if (idCliente == null) {
+                return;
+            }
 
-            int cantidad = Integer.parseInt(
-                    JOptionPane.showInputDialog(
-                            ventana,
-                            "¿Cuántas recomendaciones desea?"
-                    )
-            );
+            Integer cantidad = pedirEntero("¿Cuántas recomendaciones desea?");
+            if (cantidad == null) {
+                return;
+            }
 
             ArrayList<Pelicula> recomendaciones =
                     videoClub.generarRecomendaciones(idCliente, cantidad);
@@ -648,6 +690,22 @@ public class VistaGrafica{
         }
     }
 
+    private Integer pedirEntero(String mensaje) {
+        String entrada = JOptionPane.showInputDialog(ventana, mensaje);
+
+        //si cancela, simplemente vuelve al menu
+        if (entrada == null) {
+            return null;
+        }
+
+        try {
+            return Integer.parseInt(entrada);
+        } catch (NumberFormatException e) {
+            mostrarError("Debe ingresar un numero valido.");
+            return null;
+        }
+    }
+
     private void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(
                 ventana,
@@ -670,12 +728,10 @@ public class VistaGrafica{
 
             try {
 
-                int idCliente = Integer.parseInt(
-                    JOptionPane.showInputDialog(
-                        ventana,
-                        "ID del cliente:"
-                    )
-                );
+                Integer idCliente = pedirEntero("ID del cliente:");
+                if (idCliente == null) {
+                    return;
+                }
 
                 ArrayList<Arriendo> historial =
                     videoClub.listarArriendosCliente(
@@ -731,19 +787,15 @@ public class VistaGrafica{
 
         try {
 
-            int idCliente = Integer.parseInt(
-                JOptionPane.showInputDialog(
-                    ventana,
-                    "ID del cliente:"
-                )
-            );
+            Integer idCliente = pedirEntero("ID del cliente:");
+            if (idCliente == null) {
+                return;
+            }
 
-            int numero = Integer.parseInt(
-                JOptionPane.showInputDialog(
-                    ventana,
-                    "Numero del arriendo:"
-                )
-            );
+            Integer numero = pedirEntero("Numero del arriendo:");
+            if (numero == null) {
+                return;
+            }
 
             Arriendo arriendo =
                 videoClub.buscarArriendo(
@@ -775,19 +827,15 @@ public class VistaGrafica{
 
         try {
 
-            int idCliente = Integer.parseInt(
-                JOptionPane.showInputDialog(
-                    ventana,
-                    "ID del cliente:"
-                )
-            );
+            Integer idCliente = pedirEntero("ID del cliente:");
+            if (idCliente == null) {
+                return;
+            }
 
-            int numero = Integer.parseInt(
-                JOptionPane.showInputDialog(
-                    ventana,
-                    "Numero del arriendo:"
-                )
-            );
+            Integer numero = pedirEntero("Numero del arriendo:");
+            if (numero == null) {
+                return;
+            }
 
             Arriendo arriendo =
                 videoClub.buscarArriendo(
@@ -801,6 +849,9 @@ public class VistaGrafica{
                     "Nueva fecha (AAAA-MM-DD):",
                     arriendo.getFechaArriendo()
                 );
+            if (fecha == null) {
+                return;
+            }
 
             LocalDate nuevaFecha =
                 LocalDate.parse(fecha);
@@ -840,19 +891,15 @@ public class VistaGrafica{
 
         try {
 
-            int idCliente = Integer.parseInt(
-                JOptionPane.showInputDialog(
-                    ventana,
-                    "ID del cliente:"
-                )
-            );
+            Integer idCliente = pedirEntero("ID del cliente:");
+            if (idCliente == null) {
+                return;
+            }
 
-            int numero = Integer.parseInt(
-                JOptionPane.showInputDialog(
-                    ventana,
-                    "Numero del arriendo:"
-                )
-            );
+            Integer numero = pedirEntero("Numero del arriendo:");
+            if (numero == null) {
+                return;
+            }
 
             Arriendo arriendo =
                 videoClub.buscarArriendo(
