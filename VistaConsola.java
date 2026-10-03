@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.time.LocalDate;
@@ -20,94 +21,113 @@ public class VistaConsola {
      * Inicia el menú principal de la interfaz de consola.
      */
     public void iniciar(){
-        int opcion;
+        int opcion = -1;
         do {
             mostrarMenu();
-            opcion = scanner.nextInt();
-            scanner.nextLine();
-            switch (opcion) {
 
-                case 1:
-                    agregarCliente();
-                    break;
+            try {
+                opcion = scanner.nextInt();
+                scanner.nextLine();
+                switch (opcion) {
 
-                case 2:
-                    agregarPelicula();
-                    break;
+                    case 1:
+                        agregarCliente();
+                        break;
 
-                case 3:
-                    listarClientes();
-                    break;
+                    case 2:
+                        agregarPelicula();
+                        break;
 
-                case 4:
-                    listarPeliculas();
-                    break;
+                    case 3:
+                        listarClientes();
+                        break;
 
-                case 5:
-                    buscarCliente();
-                    break;
+                    case 4:
+                        listarPeliculas();
+                        break;
 
-                case 6:
-                    buscarPelicula();
-                    break;
+                    case 5:
+                        buscarCliente();
+                        break;
 
-                case 7:
-                    editarCliente();
-                    break;
+                    case 6:
+                        buscarPelicula();
+                        break;
 
-                case 8:
-                    editarPelicula();
-                    break;
-                    
-                case 9:
-                    eliminarCliente();
-                    break;
+                    case 7:
+                        editarCliente();
+                        break;
 
-                case 10:
-                    eliminarPelicula();
-                    break;
+                    case 8:
+                        editarPelicula();
+                        break;
 
-                case 11:
-                    realizarArriendo();
-                    break;
+                    case 9:
+                        eliminarCliente();
+                        break;
 
-                case 12:
-                    realizarDevolucion();
-                    break;
+                    case 10:
+                        eliminarPelicula();
+                        break;
 
-                case 13:
-                    generarRecomendaciones();
-                    break;
+                    case 11:
+                        realizarArriendo();
+                        break;
 
-                case 14:
-                    listarArriendos();
-                    break;
+                    case 12:
+                        realizarDevolucion();
+                        break;
 
-                case 15:
-                    buscarArriendo();
-                    break;
+                    case 13:
+                        generarRecomendaciones();
+                        break;
 
-                case 16:
-                    editarArriendo();
-                    break;
+                    case 14:
+                        listarArriendos();
+                        break;
 
-                case 17:
-                    eliminarArriendo();
-                    break;
+                    case 15:
+                        buscarArriendo();
+                        break;
 
-                case 18:
-                    mostrarEstadisticas();
-                    break;
+                    case 16:
+                        editarArriendo();
+                        break;
 
-                case 0:
-                    System.out.println("Saliendo del sistema...");
-                    break;
+                    case 17:
+                        eliminarArriendo();
+                        break;
 
-                default:
-                    System.out.println("Opcion invalida.");
+                    case 18:
+                        mostrarEstadisticas();
+                        break;
+
+                    case 0:
+                        System.out.println("Saliendo del sistema...");
+                        break;
+
+                    default:
+                        System.out.println("Opcion invalida.");
+                }
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("\nError: debe ingresar un numero valido.");
+
+                scanner.nextLine();
+                opcion = -1;
             }
+
+            if (opcion != 0) {
+                pausar();
+            }
+
         }while (opcion != 0);
     }
+
+    private void pausar() {
+        System.out.println("\nPresione ENTER para volver al menu...");
+        scanner.nextLine();
+    }
+
     private void mostrarMenu() {
 
         System.out.println("\n=== Video Club ===");

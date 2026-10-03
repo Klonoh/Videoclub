@@ -34,7 +34,23 @@ public class Main {
         System.out.println("2. Usar Ventanas");
         System.out.print("Seleccione modo: ");
 
-        int modo = scanner.nextInt();
+        int modo = -1;
+
+        while (modo != 1 && modo != 2) {
+
+            String entrada = scanner.nextLine();
+
+            try {
+                modo = Integer.parseInt(entrada);
+
+                if (modo != 1 && modo != 2) {
+                    System.out.print("Opcion invalida. Ingrese 1 o 2: ");
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.print("Debe ingresar 1 o 2: ");
+            }
+        }
 
         if (modo == 1) {
 
