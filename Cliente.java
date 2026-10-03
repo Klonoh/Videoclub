@@ -1,6 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa a un cliente del videoclub junto con sus datos personales
+ * y su historial de arriendos.
+ */
 public class Cliente{
     private int idCliente;
     private String nombre;

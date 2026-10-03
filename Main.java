@@ -1,8 +1,16 @@
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Punto de entrada de la aplicación. Carga los datos y permite seleccionar
+ * entre la interfaz de consola y la interfaz gráfica.
+ */
 public class Main {
 
+    /**
+     * Inicia la aplicación, carga los datos y solicita el modo de interfaz.
+     * @param args argumentos de línea de comandos
+     */
     public static void main(String[] args) {
 
         VideoClub videoClub = new VideoClub();

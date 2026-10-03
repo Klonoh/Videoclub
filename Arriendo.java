@@ -1,5 +1,9 @@
 import java.time.LocalDate;
 
+/**
+ * Representa el arriendo de una película realizado por un cliente.
+ * Mantiene las fechas del arriendo y su estado de devolución.
+ */
 public class Arriendo extends InteraccionClientePelicula {
 
     private LocalDate fechaArriendo;
@@ -44,7 +48,11 @@ public class Arriendo extends InteraccionClientePelicula {
         this.devuelto = devuelto;
     }
 
-    //en un arriendo la interacción se considera finalizada cuando la película fue devuelta
+    /**
+     * En un arriendo, la interacción finaliza cuando la película fue devuelta.
+     *
+     * @return true si el arriendo fue devuelto
+     */
     @Override
     public boolean estaFinalizada() {
         return devuelto;

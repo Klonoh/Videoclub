@@ -4,6 +4,10 @@ import java.util.Map;
 import java.util.List;
 import java.time.LocalDate;
 
+/**
+ * Clase principal del dominio que coordina clientes, películas, arriendos
+ * y recomendaciones, delegando las operaciones especializadas a sus gestores.
+ */
 public class VideoClub{
     private Map<Integer, Cliente> clientes;
     private Map<Integer, Pelicula> peliculas;
@@ -61,6 +65,12 @@ public class VideoClub{
         clientes.put(cliente.getIdCliente(), cliente);
     }
 
+    /**
+     * Busca un cliente por su identificador.
+     * @param idCliente identificador del cliente
+     * @return cliente encontrado
+     * @throws ClienteNoEncontradoException si el cliente no existe
+     */
     public Cliente buscarCliente(int idCliente) throws ClienteNoEncontradoException {
         Cliente cliente = clientes.get(idCliente);
 
@@ -74,6 +84,12 @@ public class VideoClub{
         peliculas.put(pelicula.getIdPelicula(), pelicula);
     }
 
+    /**
+     * Busca una película por su identificador.
+     * @param idPelicula identificador de la película
+     * @return película encontrada
+     * @throws PeliculaNoDisponibleException si la película no existe
+     */
     public Pelicula buscarPelicula(int idPelicula) throws PeliculaNoDisponibleException {
         Pelicula pelicula = peliculas.get(idPelicula);
         if (pelicula == null) {
@@ -82,7 +98,13 @@ public class VideoClub{
         return pelicula;
     }
 
-    /** Sobrecarga: busca por coincidencia parcial de titulo o genero (no lanza excepcion, retorna lista vacia si no hay). */
+    /**
+     * Busca películas por coincidencia parcial de título o género.
+     * Esta sobrecarga permite realizar búsquedas mediante texto.
+     *
+     * @param textoCriterio texto utilizado como criterio de búsqueda
+     * @return lista de películas coincidentes; puede estar vacía
+     */
     public List<Pelicula> buscarPelicula(String textoCriterio) {
         List<Pelicula> resultado = new ArrayList<>();
         String criterio = textoCriterio.toLowerCase();
@@ -146,6 +168,15 @@ public class VideoClub{
         gestorRecomendaciones.agregarRecomendacion(recomendacion);
     }
 
+    /**
+     * Coordina el arriendo de una película y actualiza una recomendación
+     * pendiente si corresponde.
+     *
+     * @param idCliente identificador del cliente
+     * @param idPelicula identificador de la película
+     * @throws PeliculaNoDisponibleException si la película no existe o no tiene stock
+     * @throws ClienteNoEncontradoException si el cliente no existe
+     */
     public void realizarArriendo(int idCliente, int idPelicula) throws PeliculaNoDisponibleException, ClienteNoEncontradoException {
         Cliente cliente = buscarCliente(idCliente);
         Pelicula pelicula = buscarPelicula(idPelicula);
@@ -200,6 +231,14 @@ public class VideoClub{
         }
     }
 
+    /**
+     * Genera recomendaciones para un cliente delegando el cálculo al gestor.
+     *
+     * @param idCliente identificador del cliente
+     * @param cantidad cantidad máxima de recomendaciones
+     * @return películas recomendadas
+     * @throws ClienteNoEncontradoException si el cliente no existe
+     */
     public ArrayList<Pelicula> generarRecomendaciones(int idCliente, int cantidad) throws ClienteNoEncontradoException {
         Cliente cliente = buscarCliente(idCliente);
         return gestorRecomendaciones.generarRecomendaciones(cliente, cantidad, new ArrayList<>(peliculas.values()), gestorArriendos);

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Implementa la interacción con el sistema mediante ventanas Swing.
+ */
 public class VistaGrafica{
     private VideoClub videoClub;
     private JFrame ventana;
@@ -12,6 +15,9 @@ public class VistaGrafica{
     public VistaGrafica(VideoClub videoClub){
         this.videoClub = videoClub; 
     }
+    /**
+     * Construye y muestra la ventana principal de la aplicación.
+     */
     public void iniciar(){
         ventana  = new JFrame("Video Club");
         ventana.setSize(700,550);

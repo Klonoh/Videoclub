@@ -1,3 +1,7 @@
+/**
+ * Representa una película recomendada a un cliente y registra si la
+ * recomendación terminó siendo exitosa.
+ */
 public class Recomendacion extends InteraccionClientePelicula{
 
     private boolean exitosa;
@@ -15,7 +19,11 @@ public class Recomendacion extends InteraccionClientePelicula{
         this.exitosa = exitosa;
     }
 
-    //en una recomendación la interacción se considera finalizada cuando fue exitosa
+    /**
+     * En una recomendación, la interacción finaliza cuando esta fue exitosa.
+     *
+     * @return true si la recomendación fue exitosa
+     */
     @Override
     public boolean estaFinalizada() {
         return exitosa;

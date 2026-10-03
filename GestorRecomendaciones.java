@@ -3,6 +3,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Gestiona las recomendaciones de películas y calcula sugerencias para
+ * los clientes a partir de su historial y de recomendaciones exitosas.
+ */
 public class GestorRecomendaciones {
 
     private ArrayList<Recomendacion> recomendaciones;
@@ -23,6 +27,12 @@ public class GestorRecomendaciones {
         recomendaciones.add(recomendacion);
     }
 
+    /**
+     * Calcula las preferencias de género contando los arriendos del cliente.
+     *
+     * @param cliente cliente cuyo historial será analizado
+     * @return mapa con cada género y su cantidad de apariciones
+     */
     public Map<String, Integer> obtenerPreferenciasGenero(Cliente cliente) {
         Map<String, Integer> preferencias = new HashMap<>();
 
@@ -88,6 +98,13 @@ public class GestorRecomendaciones {
         agregarRecomendacion(new Recomendacion(cliente, pelicula));
     }
 
+    /**
+     * Marca como exitosa una recomendación pendiente cuando el cliente
+     * arrienda la película recomendada.
+     *
+     * @param idCliente identificador del cliente
+     * @param idPelicula identificador de la película
+     */
     public void marcarRecomendacionExitosa(int idCliente, int idPelicula) {
         for (Recomendacion recomendacion : recomendaciones) {
             if (recomendacion.getCliente().getIdCliente() == idCliente
@@ -157,6 +174,17 @@ public class GestorRecomendaciones {
         return resultado;
     }
 
+    /**
+     * Genera recomendaciones considerando historial, géneros preferidos,
+     * recomendaciones exitosas, stock y arriendos activos. Para clientes sin
+     * historial utiliza la popularidad de arriendos y recomendaciones exitosas.
+     *
+     * @param cliente cliente para el cual se generan recomendaciones
+     * @param cantidad cantidad máxima de películas a recomendar
+     * @param peliculas películas disponibles en el videoclub
+     * @param gestorArriendos gestor utilizado para consultar los arriendos
+     * @return lista de películas recomendadas
+     */
     public ArrayList<Pelicula> generarRecomendaciones(
             Cliente cliente,
             int cantidad,

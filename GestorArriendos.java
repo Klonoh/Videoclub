@@ -2,6 +2,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Gestiona los arriendos del videoclub.
+ * Se encarga de registrar, buscar, editar, eliminar y procesar devoluciones.
+ */
 public class GestorArriendos {
 
     private ArrayList<Arriendo> arriendos;
@@ -23,6 +27,13 @@ public class GestorArriendos {
         arriendo.getCliente().agregarArriendo(arriendo);
     }
 
+    /**
+     * Registra un nuevo arriendo si la película posee stock disponible.
+     *
+     * @param cliente cliente que realiza el arriendo
+     * @param pelicula película que será arrendada
+     * @throws PeliculaNoDisponibleException si no existe stock disponible
+     */
     public void realizarArriendo(Cliente cliente, Pelicula pelicula)
             throws PeliculaNoDisponibleException {
 
@@ -38,6 +49,13 @@ public class GestorArriendos {
         pelicula.disminuirStock();
     }
 
+    /**
+     * Procesa la devolución de un arriendo activo y repone el stock.
+     *
+     * @param idCliente identificador del cliente
+     * @param idPelicula identificador de la película
+     * @throws PeliculaNoDisponibleException si no existe un arriendo activo correspondiente
+     */
     public void realizarDevolucion(int idCliente, int idPelicula) {
         for (Arriendo arriendo : arriendos) {
             if (arriendo.getCliente().getIdCliente() == idCliente
@@ -66,6 +84,13 @@ public class GestorArriendos {
         return new ArrayList<>(arriendos);
     }
 
+    /**
+     * Busca un arriendo del historial de un cliente según su posición mostrada.
+     *
+     * @param cliente cliente propietario del historial
+     * @param numero número del arriendo dentro del listado
+     * @return arriendo encontrado
+     */
     public Arriendo buscarArriendo(Cliente cliente, int numero) {
         List<Arriendo> historial = cliente.getHistorial();
 

@@ -1,3 +1,7 @@
+/**
+ * Representa una película disponible en el videoclub y administra
+ * su información y stock.
+ */
 public class Pelicula{
     private int idPelicula;
     private String titulo;

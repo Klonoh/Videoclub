@@ -2,6 +2,9 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
+/**
+ * Implementa la interacción con el sistema mediante un menú de consola.
+ */
 public class VistaConsola {
     private VideoClub videoClub;
     private Scanner scanner;
@@ -12,6 +15,9 @@ public class VistaConsola {
         this.formateador = new Formateador();
     }
 
+    /**
+     * Inicia el menú principal de la interfaz de consola.
+     */
     public void iniciar(){
         int opcion;
         do {

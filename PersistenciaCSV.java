@@ -6,12 +6,23 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 
+/**
+ * Gestiona la persistencia del sistema mediante archivos CSV.
+ * Carga los datos al iniciar y los guarda al finalizar la aplicación.
+ */
 public class PersistenciaCSV {
     private static final String ARCHIVO_CLIENTES = "clientes.csv";
     private static final String ARCHIVO_PELICULAS = "peliculas.csv";
     private static final String ARCHIVO_ARRIENDOS = "arriendos.csv";
     private static final String ARCHIVO_RECOMENDACIONES = "recomendaciones.csv";
 
+    /**
+     * Carga clientes, películas, arriendos y recomendaciones desde archivos CSV.
+     * Si no existen archivos de datos, crea un conjunto inicial utilizable.
+     *
+     * @param videoClub sistema en el que se cargarán los datos
+     * @throws IOException si ocurre un error de lectura o escritura
+     */
     public void cargarDatos(VideoClub videoClub) throws IOException {
         File fClientes = new File(ARCHIVO_CLIENTES);
         File fPeliculas = new File(ARCHIVO_PELICULAS);
@@ -123,6 +134,12 @@ public class PersistenciaCSV {
 
     }
 
+    /**
+     * Guarda el estado actual del sistema en los archivos CSV correspondientes.
+     *
+     * @param videoClub sistema cuyos datos serán persistidos
+     * @throws IOException si ocurre un error de escritura
+     */
     public void guardarDatos(VideoClub videoClub) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ARCHIVO_CLIENTES))) {
             for (Cliente c : videoClub.listarClientes()) {
