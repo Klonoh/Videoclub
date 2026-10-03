@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.Map;
 
 /**
  * Implementa la interacción con el sistema mediante un menú de consola.
@@ -94,6 +95,10 @@ public class VistaConsola {
                     eliminarArriendo();
                     break;
 
+                case 18:
+                    mostrarEstadisticas();
+                    break;
+
                 case 0:
                     System.out.println("Saliendo del sistema...");
                     break;
@@ -130,6 +135,7 @@ public class VistaConsola {
         System.out.println("15. Buscar Arriendo");
         System.out.println("16. Editar Arriendo");
         System.out.println("17. Eliminar Arriendo");
+        System.out.println("18. Estadisticas de Arriendos");
 
         System.out.println("0. Salir");
 
@@ -636,6 +642,25 @@ public class VistaConsola {
             );
 
             scanner.nextLine();
+        }
+    }
+
+    private void mostrarEstadisticas() {
+
+        Map<String, Integer> estadisticas =
+                videoClub.obtenerArriendosPorGenero();
+
+        System.out.println("\n=== Arriendos por Genero ===");
+
+        if (estadisticas.isEmpty()) {
+            System.out.println("No hay arriendos registrados.");
+            return;
+        }
+
+        for (Map.Entry<String, Integer> entrada : estadisticas.entrySet()) {
+            System.out.println(
+                    entrada.getKey() + ": " + entrada.getValue()
+            );
         }
     }
 

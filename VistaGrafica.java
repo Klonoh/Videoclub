@@ -57,7 +57,7 @@ public class VistaGrafica{
         JLabel titulo = new JLabel("Bienvenido al Video Club", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 28));
         panelPrincipal.add(titulo, BorderLayout.NORTH);
-        JPanel panelBotones = new JPanel(new GridLayout(6,3,10,10));
+        JPanel panelBotones = new JPanel(new GridLayout(0,3,10,10));
 
         JButton btnAgregarCliente = new JButton("Agregar Cliente");
         JButton btnAgregarPelicula = new JButton("Agregar Película");
@@ -77,7 +77,8 @@ public class VistaGrafica{
         JButton btnBuscarArriendo = new JButton("Buscar Arriendo");
         JButton btnEditarArriendo = new JButton("Editar Arriendo");
         JButton btnEliminarArriendo = new JButton("Eliminar Arriendo");
-        
+        JButton btnEstadisticas = new JButton("Estadisticas");
+
         panelBotones.add(btnAgregarCliente);
         panelBotones.add(btnBuscarCliente);
         panelBotones.add(btnEditarCliente);
@@ -100,11 +101,13 @@ public class VistaGrafica{
 
         panelBotones.add(btnEliminarArriendo);
         panelBotones.add(btnRecomendaciones);
+        panelBotones.add(btnEstadisticas);
+
         panelBotones.add(btnGuardar);
 
         panelPrincipal.add(panelBotones, BorderLayout.CENTER);
         
-          areaResultados = new JTextArea();
+        areaResultados = new JTextArea();
         areaResultados.setEditable(false);
         areaResultados.setFont(new Font("Monospaced", Font.PLAIN, 14));
 
@@ -130,6 +133,8 @@ public class VistaGrafica{
         btnBuscarArriendo.addActionListener(e -> buscarArriendo());
         btnEditarArriendo.addActionListener(e -> editarArriendo());
         btnEliminarArriendo.addActionListener(e -> eliminarArriendo());
+        btnEstadisticas.addActionListener(e -> mostrarEstadisticas());
+
         ventana.add(panelPrincipal);
         ventana.setVisible(true);
     }
@@ -958,6 +963,25 @@ public class VistaGrafica{
                 e.getMessage()
             );
         }
+    }
+
+    private void mostrarEstadisticas() {
+
+        PanelEstadisticas panel =
+                new PanelEstadisticas(
+                        videoClub.obtenerArriendosPorGenero()
+                );
+
+        JDialog dialogo = new JDialog(
+                ventana,
+                "Estadisticas del VideoClub",
+                true
+        );
+
+        dialogo.add(panel);
+        dialogo.pack();
+        dialogo.setLocationRelativeTo(ventana);
+        dialogo.setVisible(true);
     }
 
     public VideoClub getVideoClub() {

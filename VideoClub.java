@@ -285,5 +285,14 @@ public class VideoClub{
         Cliente cliente = buscarCliente(idCliente);
         gestorArriendos.eliminarArriendo(cliente, numero);
     }
+
+    /**
+     * Obtiene la cantidad de arriendos agrupados por genero.
+     *
+     * @return estadisticas de arriendos por genero
+     */
+    public Map<String, Integer> obtenerArriendosPorGenero() {
+        return gestorArriendos.obtenerArriendosPorGenero();
+    }
 }
 

@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -149,5 +151,27 @@ public class GestorArriendos {
         }
 
         return false;
+    }
+
+    /**
+     * Obtiene la cantidad de arriendos registrados para cada genero.
+     *
+     * @return mapa con los generos y su cantidad de arriendos
+     */
+    public Map<String, Integer> obtenerArriendosPorGenero() {
+
+        Map<String, Integer> estadisticas = new HashMap<>();
+
+        for (Arriendo arriendo : arriendos) {
+
+            String genero = arriendo.getPelicula().getGenero();
+
+            estadisticas.put(
+                    genero,
+                    estadisticas.getOrDefault(genero, 0) + 1
+            );
+        }
+
+        return estadisticas;
     }
 }
