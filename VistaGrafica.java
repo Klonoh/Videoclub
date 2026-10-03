@@ -644,6 +644,11 @@ public class VistaGrafica{
                 return;
             }
 
+            if (cantidad <= 0) {
+                mostrarError("La cantidad debe ser mayor a cero.");
+                return;
+            }
+
             ArrayList<Pelicula> recomendaciones =
                     videoClub.generarRecomendaciones(idCliente, cantidad);
 
@@ -948,4 +953,29 @@ public class VistaGrafica{
             );
         }
     }
+
+    public VideoClub getVideoClub() {
+        return videoClub;
+    }
+
+    public void setVideoClub(VideoClub videoClub) {
+        this.videoClub = videoClub;
+    }
+
+    public JFrame getVentana() {
+        return ventana;
+    }
+
+    public void setVentana(JFrame ventana) {
+        this.ventana = ventana;
+    }
+
+    public JTextArea getAreaResultados() {
+        return areaResultados;
+    }
+
+    public void setAreaResultados(JTextArea areaResultados) {
+        this.areaResultados = areaResultados;
+    }
+
 }
